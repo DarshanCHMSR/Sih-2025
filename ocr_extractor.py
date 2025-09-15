@@ -250,28 +250,86 @@ class MarksCardOCRExtractor:
             # Preprocess image
             processed_image = self.preprocess_image(image_path)
             
-            # Perform OCR
-            results = self.ocr.ocr(processed_image, cls=True)
+            # Perform OCR using the recommended method
+            try:
+                # Try the newer predict method first
+                if hasattr(self.ocr, 'predict'):
+                    results = self.ocr.predict(processed_image)
+                else:
+                    results = self.ocr.ocr(processed_image)
+            except Exception as e:
+                logger.warning(f"OCR method failed: {e}, trying fallback")
+                try:
+                    results = self.ocr.ocr(processed_image)
+                except:
+                    results = self.ocr.predict(processed_image)
             
-            if not results or not results[0]:
+            # Debug: Log the structure of results
+            logger.info(f"OCR results structure - Type: {type(results)}, Length: {len(results) if results else 0}")
+            
+            if not results:
                 logger.warning("No text detected in the image")
                 return []
             
-            # Process results
+            # Process results - Handle new PaddleOCR structure
             extracted_text = []
-            for line in results[0]:
-                if line is None:
-                    continue
-                    
-                bbox, (text, confidence) = line
+            
+            # Get the first result (should be OCRResult object)
+            result = results[0]
+            
+            # Handle different result types
+            if hasattr(result, 'rec_texts') and hasattr(result, 'rec_scores'):
+                # New PaddleOCR structure with OCRResult object
+                texts = result.rec_texts
+                scores = result.rec_scores
+                bboxes = result.rec_polys if hasattr(result, 'rec_polys') else [[] for _ in texts]
                 
-                # Filter by confidence threshold
-                if confidence >= self.confidence_threshold:
-                    extracted_text.append({
-                        'text': text.strip(),
-                        'confidence': float(confidence),
-                        'bbox': bbox
-                    })
+                for i, (text, confidence) in enumerate(zip(texts, scores)):
+                    # Filter by confidence threshold
+                    if confidence >= self.confidence_threshold:
+                        bbox = bboxes[i] if i < len(bboxes) else []
+                        extracted_text.append({
+                            'text': str(text).strip(),
+                            'confidence': float(confidence),
+                            'bbox': bbox.tolist() if hasattr(bbox, 'tolist') else bbox
+                        })
+                        
+            else:
+                # Fallback for older structure (list of lists)
+                try:
+                    if isinstance(result, list):
+                        for line in result:
+                            if line is None:
+                                continue
+                            
+                            try:
+                                # Handle different line structures
+                                if len(line) == 2:
+                                    bbox, text_info = line
+                                    if isinstance(text_info, (list, tuple)) and len(text_info) == 2:
+                                        text, confidence = text_info
+                                    else:
+                                        text = str(text_info)
+                                        confidence = 1.0
+                                else:
+                                    bbox = line[0] if len(line) > 0 else []
+                                    text = line[1] if len(line) > 1 else ""
+                                    confidence = line[2] if len(line) > 2 else 1.0
+                                
+                                # Filter by confidence threshold
+                                if confidence >= self.confidence_threshold:
+                                    extracted_text.append({
+                                        'text': str(text).strip(),
+                                        'confidence': float(confidence),
+                                        'bbox': bbox
+                                    })
+                                    
+                            except Exception as e:
+                                logger.warning(f"Error processing OCR result line: {e}")
+                                continue
+                except Exception as e:
+                    logger.error(f"Error processing OCR results: {e}")
+                    return []
             
             logger.info(f"Successfully extracted {len(extracted_text)} text elements")
             return extracted_text

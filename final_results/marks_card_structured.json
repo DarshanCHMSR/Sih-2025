@@ -1,0 +1,695 @@
+{
+  "university": "UNIVERSITY OF KASHMIR, SRINAGAR",
+  "certificate_type": "MARKS CERTIFICATE",
+  "student_info": {
+    "name": "TAHIRAHMAD·KHAN",
+    "roll_number": "EROFEAMNTION",
+    "registration_number": "38051-ANG-2001",
+    "parentage": "NASIR-AHMAD-KHAN.",
+    "program": "MASTERSIN BUSINESS ADMINISTRATION",
+    "semester": "OUH",
+    "batch": "OFTHISMARKSSHEET DOESNOTCONFERANY",
+    "session": null
+  },
+  "subjects": [
+    {
+      "course_code": "MBA401",
+      "course_title": "Business Legislntion",
+      "continuous_assessment": "30",
+      "theory_marks": "22",
+      "total_marks": "70"
+    },
+    {
+      "course_code": "MBA402",
+      "course_title": "App.Development Using Oracle",
+      "continuous_assessment": "30",
+      "theory_marks": "22",
+      "total_marks": "70"
+    },
+    {
+      "course_code": "MBA403",
+      "course_title": "Project Report",
+      "continuous_assessment": "100",
+      "theory_marks": "76",
+      "total_marks": "76"
+    },
+    {
+      "course_code": "MBA404",
+      "course_title": "Comprehensive Vivs.",
+      "continuous_assessment": "50",
+      "theory_marks": "29",
+      "total_marks": "29"
+    },
+    {
+      "course_code": "MBA3105",
+      "course_title": "Sales & Distribution Management",
+      "continuous_assessment": "30",
+      "theory_marks": "23",
+      "total_marks": "70"
+    },
+    {
+      "course_code": "MBA3210",
+      "course_title": "Working Capital Manngenent",
+      "continuous_assessment": "30",
+      "theory_marks": "21",
+      "total_marks": "70"
+    },
+    {
+      "course_code": "MBA3109",
+      "course_title": "Strategic Marketing",
+      "continuous_assessment": "30",
+      "theory_marks": "20",
+      "total_marks": "70"
+    }
+  ],
+  "total_marks": null,
+  "result": "PASS",
+  "division": "IST",
+  "all_extracted_text": [
+    {
+      "text": "UNIVERSITY OF KASHMIR, SRINAGAR",
+      "confidence": 0.8958147764205933,
+      "index": 0
+    },
+    {
+      "text": "MARKS CERTIFICATE",
+      "confidence": 0.9716223478317261,
+      "index": 1
+    },
+    {
+      "text": "10260",
+      "confidence": 0.998002827167511,
+      "index": 2
+    },
+    {
+      "text": "Post Graduate Programme",
+      "confidence": 0.9784255027770996,
+      "index": 3
+    },
+    {
+      "text": "MASTERSIN BUSINESS ADMINISTRATION",
+      "confidence": 0.9315791726112366,
+      "index": 4
+    },
+    {
+      "text": "SUbJECtBUSINESSADMINISTRATION",
+      "confidence": 0.8538068532943726,
+      "index": 5
+    },
+    {
+      "text": "Semester..OuH....",
+      "confidence": 0.6350198984146118,
+      "index": 6
+    },
+    {
+      "text": "NameTAHIRAHMAD·KHAN",
+      "confidence": 0.7693940997123718,
+      "index": 7
+    },
+    {
+      "text": "Parentage NASIR-AHMAD-KHAN.",
+      "confidence": 0.8117501139640808,
+      "index": 8
+    },
+    {
+      "text": "Rl N.",
+      "confidence": 0.6417698860168457,
+      "index": 9
+    },
+    {
+      "text": "Reg.No..38051-ANG-2001..",
+      "confidence": 0.8545763492584229,
+      "index": 10
+    },
+    {
+      "text": "Batch/Sossion",
+      "confidence": 0.9913294911384583,
+      "index": 11
+    },
+    {
+      "text": "2004SESS[ONNOVDEC--2006",
+      "confidence": 0.8149883151054382,
+      "index": 12
+    },
+    {
+      "text": "RegularPieuAR....",
+      "confidence": 0.6416981816291809,
+      "index": 13
+    },
+    {
+      "text": "DETAILS OF MARKS",
+      "confidence": 0.9631109833717346,
+      "index": 14
+    },
+    {
+      "text": "Course",
+      "confidence": 0.9921929240226746,
+      "index": 15
+    },
+    {
+      "text": "Course / Title",
+      "confidence": 0.9282950758934021,
+      "index": 16
+    },
+    {
+      "text": "Cortiuous Assessmernt",
+      "confidence": 0.8448229432106018,
+      "index": 17
+    },
+    {
+      "text": "Theory Examination",
+      "confidence": 0.9414682388305664,
+      "index": 18
+    },
+    {
+      "text": "No",
+      "confidence": 0.9842013120651245,
+      "index": 19
+    },
+    {
+      "text": "Max. Maks Marks Ottt",
+      "confidence": 0.7399401664733887,
+      "index": 20
+    },
+    {
+      "text": "TOTAL",
+      "confidence": 0.9941280484199524,
+      "index": 21
+    },
+    {
+      "text": "Max. Marks Marks Ouad",
+      "confidence": 0.7939915657043457,
+      "index": 22
+    },
+    {
+      "text": "MBA401",
+      "confidence": 0.9765439033508301,
+      "index": 24
+    },
+    {
+      "text": "Business Legislntion",
+      "confidence": 0.9022642970085144,
+      "index": 25
+    },
+    {
+      "text": "30",
+      "confidence": 0.9288016557693481,
+      "index": 26
+    },
+    {
+      "text": "22",
+      "confidence": 0.998330295085907,
+      "index": 27
+    },
+    {
+      "text": "70",
+      "confidence": 0.9279646277427673,
+      "index": 28
+    },
+    {
+      "text": "38",
+      "confidence": 0.996798038482666,
+      "index": 29
+    },
+    {
+      "text": "60",
+      "confidence": 0.9647386074066162,
+      "index": 30
+    },
+    {
+      "text": "MBA402",
+      "confidence": 0.9653082489967346,
+      "index": 31
+    },
+    {
+      "text": "App.Development Using Oracle",
+      "confidence": 0.8928171396255493,
+      "index": 32
+    },
+    {
+      "text": "30",
+      "confidence": 0.9780892133712769,
+      "index": 33
+    },
+    {
+      "text": "22",
+      "confidence": 0.9983484745025635,
+      "index": 34
+    },
+    {
+      "text": "70",
+      "confidence": 0.9519833326339722,
+      "index": 35
+    },
+    {
+      "text": "43",
+      "confidence": 0.9950412511825562,
+      "index": 36
+    },
+    {
+      "text": "65",
+      "confidence": 0.9930168390274048,
+      "index": 37
+    },
+    {
+      "text": "MBA403",
+      "confidence": 0.9861035943031311,
+      "index": 38
+    },
+    {
+      "text": "Project Report",
+      "confidence": 0.8820323348045349,
+      "index": 39
+    },
+    {
+      "text": "100",
+      "confidence": 0.9735203385353088,
+      "index": 40
+    },
+    {
+      "text": "76",
+      "confidence": 0.9970401525497437,
+      "index": 41
+    },
+    {
+      "text": "76",
+      "confidence": 0.9968015551567078,
+      "index": 42
+    },
+    {
+      "text": "MBA404",
+      "confidence": 0.9255374073982239,
+      "index": 43
+    },
+    {
+      "text": "Comprehensive Vivs.",
+      "confidence": 0.9053657054901123,
+      "index": 44
+    },
+    {
+      "text": "50",
+      "confidence": 0.897642970085144,
+      "index": 45
+    },
+    {
+      "text": "29",
+      "confidence": 0.9976940155029297,
+      "index": 46
+    },
+    {
+      "text": "29",
+      "confidence": 0.9993484020233154,
+      "index": 47
+    },
+    {
+      "text": "MBA3105",
+      "confidence": 0.9711483716964722,
+      "index": 48
+    },
+    {
+      "text": "Sales & Distribution Management",
+      "confidence": 0.9169975519180298,
+      "index": 49
+    },
+    {
+      "text": "30",
+      "confidence": 0.9503210783004761,
+      "index": 50
+    },
+    {
+      "text": "23",
+      "confidence": 0.9985961318016052,
+      "index": 51
+    },
+    {
+      "text": "70",
+      "confidence": 0.9731131792068481,
+      "index": 52
+    },
+    {
+      "text": "36",
+      "confidence": 0.8674862384796143,
+      "index": 53
+    },
+    {
+      "text": "59",
+      "confidence": 0.9983327984809875,
+      "index": 54
+    },
+    {
+      "text": "MBA3210",
+      "confidence": 0.9795320630073547,
+      "index": 55
+    },
+    {
+      "text": "Working Capital Manngenent",
+      "confidence": 0.952616810798645,
+      "index": 56
+    },
+    {
+      "text": "30",
+      "confidence": 0.9767770171165466,
+      "index": 57
+    },
+    {
+      "text": "21",
+      "confidence": 0.9907503724098206,
+      "index": 58
+    },
+    {
+      "text": "70",
+      "confidence": 0.8893296718597412,
+      "index": 59
+    },
+    {
+      "text": "35",
+      "confidence": 0.991811990737915,
+      "index": 60
+    },
+    {
+      "text": "56",
+      "confidence": 0.9982465505599976,
+      "index": 61
+    },
+    {
+      "text": "MBA3109",
+      "confidence": 0.9716611504554749,
+      "index": 62
+    },
+    {
+      "text": "Strategic Marketing",
+      "confidence": 0.9516568183898926,
+      "index": 63
+    },
+    {
+      "text": "30",
+      "confidence": 0.9745631217956543,
+      "index": 64
+    },
+    {
+      "text": "20",
+      "confidence": 0.9610137343406677,
+      "index": 65
+    },
+    {
+      "text": "70",
+      "confidence": 0.873805582523346,
+      "index": 66
+    },
+    {
+      "text": "41",
+      "confidence": 0.9627122282981873,
+      "index": 67
+    },
+    {
+      "text": "61",
+      "confidence": 0.9902711510658264,
+      "index": 68
+    },
+    {
+      "text": "Total:",
+      "confidence": 0.9887216687202454,
+      "index": 69
+    },
+    {
+      "text": "Continuous Assessment",
+      "confidence": 0.9358128905296326,
+      "index": 70
+    },
+    {
+      "text": "150",
+      "confidence": 0.9889473915100098,
+      "index": 71
+    },
+    {
+      "text": "108 500",
+      "confidence": 0.953121542930603,
+      "index": 72
+    },
+    {
+      "text": "298",
+      "confidence": 0.9972674250602722,
+      "index": 73
+    },
+    {
+      "text": "Result:Theory",
+      "confidence": 0.9371039271354675,
+      "index": 74
+    },
+    {
+      "text": "406",
+      "confidence": 0.9752481579780579,
+      "index": 75
+    },
+    {
+      "text": "T MaksinFgures(TAmen)",
+      "confidence": 0.6474114060401917,
+      "index": 76
+    },
+    {
+      "text": "406",
+      "confidence": 0.9786342978477478,
+      "index": 77
+    },
+    {
+      "text": "PASS",
+      "confidence": 0.9947988390922546,
+      "index": 78
+    },
+    {
+      "text": "Tol Main(ThyoAs）",
+      "confidence": 0.6046385765075684,
+      "index": 79
+    },
+    {
+      "text": "FOUR HUNDRED-SIX",
+      "confidence": 0.8995044827461243,
+      "index": 80
+    },
+    {
+      "text": "Details",
+      "confidence": 0.981772780418396,
+      "index": 81
+    },
+    {
+      "text": "Cont.",
+      "confidence": 0.9647479057312012,
+      "index": 82
+    },
+    {
+      "text": "Theory",
+      "confidence": 0.9121737480163574,
+      "index": 83
+    },
+    {
+      "text": "Total",
+      "confidence": 0.9761455655097961,
+      "index": 84
+    },
+    {
+      "text": "Assmt.",
+      "confidence": 0.9736537933349609,
+      "index": 85
+    },
+    {
+      "text": "1st",
+      "confidence": 0.9244034886360168,
+      "index": 86
+    },
+    {
+      "text": "Grand Total (in Figures)",
+      "confidence": 0.9429507255554199,
+      "index": 87
+    },
+    {
+      "text": "2nd",
+      "confidence": 0.9971277117729187,
+      "index": 88
+    },
+    {
+      "text": "152",
+      "confidence": 0.9564697742462158,
+      "index": 89
+    },
+    {
+      "text": "292",
+      "confidence": 0.9974177479743958,
+      "index": 90
+    },
+    {
+      "text": "444",
+      "confidence": 0.997656524181366,
+      "index": 91
+    },
+    {
+      "text": "17042000",
+      "confidence": 0.8812553882598877,
+      "index": 92
+    },
+    {
+      "text": "3rd",
+      "confidence": 0.9919605255126953,
+      "index": 93
+    },
+    {
+      "text": "146",
+      "confidence": 0.8905068039894104,
+      "index": 94
+    },
+    {
+      "text": "308",
+      "confidence": 0.9732710719108582,
+      "index": 95
+    },
+    {
+      "text": "454",
+      "confidence": 0.9879760146141052,
+      "index": 96
+    },
+    {
+      "text": "Grand Total (in words):",
+      "confidence": 0.944857656955719,
+      "index": 97
+    },
+    {
+      "text": "4th",
+      "confidence": 0.9892780184745789,
+      "index": 98
+    },
+    {
+      "text": "140",
+      "confidence": 0.9517295956611633,
+      "index": 99
+    },
+    {
+      "text": "260",
+      "confidence": 0.9414346814155579,
+      "index": 100
+    },
+    {
+      "text": "400",
+      "confidence": 0.9692597985267639,
+      "index": 101
+    },
+    {
+      "text": "108",
+      "confidence": 0.9785513281822205,
+      "index": 102
+    },
+    {
+      "text": "298",
+      "confidence": 0.9981052279472351,
+      "index": 103
+    },
+    {
+      "text": "406",
+      "confidence": 0.8762497901916504,
+      "index": 104
+    },
+    {
+      "text": "ONE THOUSAND SEVEN HUNDRED FOUR",
+      "confidence": 0.9440485239028931,
+      "index": 105
+    },
+    {
+      "text": "5th",
+      "confidence": 0.9688214659690857,
+      "index": 106
+    },
+    {
+      "text": "Division:",
+      "confidence": 0.9848692417144775,
+      "index": 107
+    },
+    {
+      "text": "6th",
+      "confidence": 0.9914887547492981,
+      "index": 108
+    },
+    {
+      "text": "IST",
+      "confidence": 0.9922811388969421,
+      "index": 109
+    },
+    {
+      "text": "Grand",
+      "confidence": 0.9965640902519226,
+      "index": 110
+    },
+    {
+      "text": "Total",
+      "confidence": 0.9732456207275391,
+      "index": 111
+    },
+    {
+      "text": "546",
+      "confidence": 0.9877001643180847,
+      "index": 112
+    },
+    {
+      "text": "11581704",
+      "confidence": 0.8821486234664917,
+      "index": 113
+    },
+    {
+      "text": "Notification No.",
+      "confidence": 0.9017965197563171,
+      "index": 115
+    },
+    {
+      "text": "Dated",
+      "confidence": 0.9918954968452454,
+      "index": 116
+    },
+    {
+      "text": "[18]",
+      "confidence": 0.8547767400741577,
+      "index": 117
+    },
+    {
+      "text": "29-OCTOBER-2009",
+      "confidence": 0.9670947194099426,
+      "index": 118
+    },
+    {
+      "text": "Errors and Omissions Excepted",
+      "confidence": 0.9458552002906799,
+      "index": 119
+    },
+    {
+      "text": "Merepossessionofthismarkssheet doesnotconferany",
+      "confidence": 0.8119633197784424,
+      "index": 120
+    },
+    {
+      "text": "UNIVERSITYCAMPUS",
+      "confidence": 0.9864413142204285,
+      "index": 122
+    },
+    {
+      "text": "rightorprivilegindendeoftrorquliation",
+      "confidence": 0.6673799753189087,
+      "index": 123
+    },
+    {
+      "text": "certificatewhichwillbeissuedindecourseoftime.",
+      "confidence": 0.8078956604003906,
+      "index": 124
+    },
+    {
+      "text": "DyJAst.CotrollerofEamntion",
+      "confidence": 0.6948098540306091,
+      "index": 125
+    },
+    {
+      "text": "SRINAGAR-190006",
+      "confidence": 0.987163782119751,
+      "index": 126
+    },
+    {
+      "text": "Scanned by CamScanner",
+      "confidence": 0.9958308935165405,
+      "index": 127
+    }
+  ]
+}
