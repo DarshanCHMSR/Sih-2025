@@ -1,0 +1,2 @@
+2025-09-15 18:42:04,776 - ERROR - Failed to initialize PaddleOCR: Unknown argument: use_gpu
+2025-09-15 18:42:45,394 - ERROR - Failed to initialize PaddleOCR: Unknown argument: show_log
