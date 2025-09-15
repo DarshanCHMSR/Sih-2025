@@ -1,0 +1,750 @@
+{
+  "university": "2308324",
+  "certificate_type": "BANGALORE",
+  "student_info": {
+    "name": "JABIRNK",
+    "roll_number": null,
+    "registration_number": null,
+    "parentage": null,
+    "program": "DEGREE:MASTEROF BUSINESSADMINISTRATION",
+    "semester": null,
+    "batch": null,
+    "session": null
+  },
+  "subjects": [],
+  "total_marks": null,
+  "result": "FIRST CLASS",
+  "division": null,
+  "all_extracted_text": [
+    {
+      "text": "2308324",
+      "confidence": 0.998770534992218,
+      "index": 0
+    },
+    {
+      "text": "BANGALORE",
+      "confidence": 0.9961323142051697,
+      "index": 1
+    },
+    {
+      "text": "UNIVERSITY",
+      "confidence": 0.9940770268440247,
+      "index": 2
+    },
+    {
+      "text": "1731712",
+      "confidence": 0.9270864129066467,
+      "index": 3
+    },
+    {
+      "text": "DEGREE:MASTEROF BUSINESSADMINISTRATION",
+      "confidence": 0.8847150206565857,
+      "index": 4
+    },
+    {
+      "text": "STATEMENTOFMARKS",
+      "confidence": 0.9967226386070251,
+      "index": 5
+    },
+    {
+      "text": "DATE:08/12/2014",
+      "confidence": 0.9836273789405823,
+      "index": 6
+    },
+    {
+      "text": "Course: M.B.A",
+      "confidence": 0.9399839639663696,
+      "index": 7
+    },
+    {
+      "text": "r/Sem:4",
+      "confidence": 0.9174128174781799,
+      "index": 8
+    },
+    {
+      "text": "Month& Year of Examination：Jun/2014",
+      "confidence": 0.928817093372345,
+      "index": 9
+    },
+    {
+      "text": "RegisterNumber:12YUCMA056",
+      "confidence": 0.9521960616111755,
+      "index": 10
+    },
+    {
+      "text": "NAME:JABIRNK",
+      "confidence": 0.9660181999206543,
+      "index": 11
+    },
+    {
+      "text": "'ON'TS",
+      "confidence": 0.6120259165763855,
+      "index": 12
+    },
+    {
+      "text": "WNINININ",
+      "confidence": 0.6955407857894897,
+      "index": 15
+    },
+    {
+      "text": "TOTALMARKS OBTAINED",
+      "confidence": 0.9515819549560547,
+      "index": 17
+    },
+    {
+      "text": "SUBJECT",
+      "confidence": 0.9849333167076111,
+      "index": 19
+    },
+    {
+      "text": "IN FIGURES",
+      "confidence": 0.9423121213912964,
+      "index": 20
+    },
+    {
+      "text": "IN WORDS",
+      "confidence": 0.9182602167129517,
+      "index": 21
+    },
+    {
+      "text": "4.1 STRATEGICMANAGEMENT",
+      "confidence": 0.9755055904388428,
+      "index": 23
+    },
+    {
+      "text": "100",
+      "confidence": 0.9988405704498291,
+      "index": 24
+    },
+    {
+      "text": "40",
+      "confidence": 0.9989908933639526,
+      "index": 25
+    },
+    {
+      "text": "THEORY-I",
+      "confidence": 0.9503372311592102,
+      "index": 26
+    },
+    {
+      "text": "75",
+      "confidence": 0.9991782903671265,
+      "index": 27
+    },
+    {
+      "text": "30",
+      "confidence": 0.9991567134857178,
+      "index": 28
+    },
+    {
+      "text": "36",
+      "confidence": 0.996769905090332,
+      "index": 29
+    },
+    {
+      "text": "THIRTY SIX",
+      "confidence": 0.9744988679885864,
+      "index": 30
+    },
+    {
+      "text": "INTERNAL ASSESSMENT",
+      "confidence": 0.9450859427452087,
+      "index": 31
+    },
+    {
+      "text": "25",
+      "confidence": 0.9990658760070801,
+      "index": 32
+    },
+    {
+      "text": "0",
+      "confidence": 0.945509672164917,
+      "index": 33
+    },
+    {
+      "text": "17",
+      "confidence": 0.9982965588569641,
+      "index": 34
+    },
+    {
+      "text": "SEVENTEEN",
+      "confidence": 0.9951932430267334,
+      "index": 35
+    },
+    {
+      "text": "2",
+      "confidence": 0.9177015423774719,
+      "index": 36
+    },
+    {
+      "text": "4.2INTERNATIONALBUSINESS",
+      "confidence": 0.9871771335601807,
+      "index": 37
+    },
+    {
+      "text": "100",
+      "confidence": 0.9989612102508545,
+      "index": 38
+    },
+    {
+      "text": "40",
+      "confidence": 0.9980310201644897,
+      "index": 39
+    },
+    {
+      "text": "THEORY-I",
+      "confidence": 0.9176952838897705,
+      "index": 40
+    },
+    {
+      "text": "75",
+      "confidence": 0.9986303448677063,
+      "index": 41
+    },
+    {
+      "text": "30",
+      "confidence": 0.9989174604415894,
+      "index": 42
+    },
+    {
+      "text": "43",
+      "confidence": 0.9979482889175415,
+      "index": 43
+    },
+    {
+      "text": "FORTY THREE",
+      "confidence": 0.971829354763031,
+      "index": 44
+    },
+    {
+      "text": "INTERNALASSESSMENT",
+      "confidence": 0.9611523151397705,
+      "index": 45
+    },
+    {
+      "text": "25",
+      "confidence": 0.9989041090011597,
+      "index": 46
+    },
+    {
+      "text": "0",
+      "confidence": 0.9376152157783508,
+      "index": 47
+    },
+    {
+      "text": "19",
+      "confidence": 0.9972723722457886,
+      "index": 48
+    },
+    {
+      "text": "NINETEEN",
+      "confidence": 0.9950948357582092,
+      "index": 49
+    },
+    {
+      "text": "F.4INTL.FINANCIAL MANAGEMENT",
+      "confidence": 0.9521346092224121,
+      "index": 50
+    },
+    {
+      "text": "100",
+      "confidence": 0.9993390440940857,
+      "index": 51
+    },
+    {
+      "text": "40",
+      "confidence": 0.9983677864074707,
+      "index": 52
+    },
+    {
+      "text": "THEORY-I",
+      "confidence": 0.9249706268310547,
+      "index": 53
+    },
+    {
+      "text": "75",
+      "confidence": 0.9987891912460327,
+      "index": 54
+    },
+    {
+      "text": "30",
+      "confidence": 0.99913489818573,
+      "index": 55
+    },
+    {
+      "text": "35",
+      "confidence": 0.9990853071212769,
+      "index": 56
+    },
+    {
+      "text": "THIRTYFIVE",
+      "confidence": 0.9911007881164551,
+      "index": 57
+    },
+    {
+      "text": "INTERNALASSESSMENT",
+      "confidence": 0.9763548374176025,
+      "index": 58
+    },
+    {
+      "text": "25",
+      "confidence": 0.9985555410385132,
+      "index": 59
+    },
+    {
+      "text": "0",
+      "confidence": 0.9706960916519165,
+      "index": 60
+    },
+    {
+      "text": "18",
+      "confidence": 0.9859446287155151,
+      "index": 61
+    },
+    {
+      "text": "EIGHTEEN",
+      "confidence": 0.9887576699256897,
+      "index": 62
+    },
+    {
+      "text": "F.S STRATEGIC FINANCIALMANAGEMENT",
+      "confidence": 0.9507489800453186,
+      "index": 63
+    },
+    {
+      "text": "100",
+      "confidence": 0.9991541504859924,
+      "index": 64
+    },
+    {
+      "text": "40",
+      "confidence": 0.9981880784034729,
+      "index": 65
+    },
+    {
+      "text": "THEORY-I",
+      "confidence": 0.9077397584915161,
+      "index": 66
+    },
+    {
+      "text": "75",
+      "confidence": 0.9988778829574585,
+      "index": 67
+    },
+    {
+      "text": "30",
+      "confidence": 0.9994756579399109,
+      "index": 68
+    },
+    {
+      "text": "39",
+      "confidence": 0.9986867904663086,
+      "index": 69
+    },
+    {
+      "text": "THIRTY NINE",
+      "confidence": 0.9714066982269287,
+      "index": 70
+    },
+    {
+      "text": "INTERNAL ASSESSMENT",
+      "confidence": 0.9263311624526978,
+      "index": 71
+    },
+    {
+      "text": "25",
+      "confidence": 0.9993624687194824,
+      "index": 72
+    },
+    {
+      "text": "0",
+      "confidence": 0.9312132000923157,
+      "index": 73
+    },
+    {
+      "text": "21",
+      "confidence": 0.9956321716308594,
+      "index": 74
+    },
+    {
+      "text": "TWENTY ONE",
+      "confidence": 0.950122058391571,
+      "index": 75
+    },
+    {
+      "text": "M.4 RURAL AND AGRICULTURAL",
+      "confidence": 0.9376224279403687,
+      "index": 76
+    },
+    {
+      "text": "100",
+      "confidence": 0.9991839528083801,
+      "index": 77
+    },
+    {
+      "text": "40",
+      "confidence": 0.9984171390533447,
+      "index": 78
+    },
+    {
+      "text": "THEORY-I",
+      "confidence": 0.9122650027275085,
+      "index": 79
+    },
+    {
+      "text": "75",
+      "confidence": 0.9982488751411438,
+      "index": 80
+    },
+    {
+      "text": "30",
+      "confidence": 0.9992578029632568,
+      "index": 81
+    },
+    {
+      "text": "39",
+      "confidence": 0.9981151819229126,
+      "index": 82
+    },
+    {
+      "text": "THIRTY NINE",
+      "confidence": 0.9576776027679443,
+      "index": 83
+    },
+    {
+      "text": "INTERNALASSESSMENT",
+      "confidence": 0.9522005915641785,
+      "index": 84
+    },
+    {
+      "text": "25",
+      "confidence": 0.9992448091506958,
+      "index": 85
+    },
+    {
+      "text": "0",
+      "confidence": 0.9556941390037537,
+      "index": 86
+    },
+    {
+      "text": "17",
+      "confidence": 0.9972150921821594,
+      "index": 87
+    },
+    {
+      "text": "SEVENTEEN",
+      "confidence": 0.9941229224205017,
+      "index": 88
+    },
+    {
+      "text": "M.5 RETAILING MANAGEMENT",
+      "confidence": 0.9421124458312988,
+      "index": 90
+    },
+    {
+      "text": "100",
+      "confidence": 0.9991647601127625,
+      "index": 91
+    },
+    {
+      "text": "40",
+      "confidence": 0.9992518424987793,
+      "index": 92
+    },
+    {
+      "text": "THEORY-I",
+      "confidence": 0.9448239803314209,
+      "index": 93
+    },
+    {
+      "text": "75",
+      "confidence": 0.9986392855644226,
+      "index": 94
+    },
+    {
+      "text": "30",
+      "confidence": 0.9997049570083618,
+      "index": 95
+    },
+    {
+      "text": "48",
+      "confidence": 0.9983286261558533,
+      "index": 96
+    },
+    {
+      "text": "FORTY EIGHT",
+      "confidence": 0.953519880771637,
+      "index": 97
+    },
+    {
+      "text": "INTERNALASSESSMENT",
+      "confidence": 0.9791905879974365,
+      "index": 98
+    },
+    {
+      "text": "25",
+      "confidence": 0.9992146492004395,
+      "index": 99
+    },
+    {
+      "text": "0",
+      "confidence": 0.969716489315033,
+      "index": 100
+    },
+    {
+      "text": "20",
+      "confidence": 0.9987526535987854,
+      "index": 101
+    },
+    {
+      "text": "TWENTY",
+      "confidence": 0.9924953579902649,
+      "index": 102
+    },
+    {
+      "text": "M.6ADVERTISING&INTEGRATEDBRAND",
+      "confidence": 0.9892362356185913,
+      "index": 103
+    },
+    {
+      "text": "100",
+      "confidence": 0.9990944862365723,
+      "index": 104
+    },
+    {
+      "text": "40",
+      "confidence": 0.9992814064025879,
+      "index": 105
+    },
+    {
+      "text": "MANAGEMENT",
+      "confidence": 0.9949859380722046,
+      "index": 106
+    },
+    {
+      "text": "THEORY-I",
+      "confidence": 0.9496569633483887,
+      "index": 107
+    },
+    {
+      "text": "75",
+      "confidence": 0.9992189407348633,
+      "index": 108
+    },
+    {
+      "text": "30",
+      "confidence": 0.9989433288574219,
+      "index": 109
+    },
+    {
+      "text": "39",
+      "confidence": 0.9988390207290649,
+      "index": 110
+    },
+    {
+      "text": "THIRTY NINE",
+      "confidence": 0.9641801714897156,
+      "index": 111
+    },
+    {
+      "text": "INTERNAL ASSESSMENT",
+      "confidence": 0.9742754697799683,
+      "index": 112
+    },
+    {
+      "text": "25",
+      "confidence": 0.9990018606185913,
+      "index": 113
+    },
+    {
+      "text": "0",
+      "confidence": 0.9373912215232849,
+      "index": 114
+    },
+    {
+      "text": "18",
+      "confidence": 0.9952183961868286,
+      "index": 115
+    },
+    {
+      "text": "EIGHTEEN",
+      "confidence": 0.9958000183105469,
+      "index": 116
+    },
+    {
+      "text": "8",
+      "confidence": 0.9787396192550659,
+      "index": 117
+    },
+    {
+      "text": "4.8DISSERTATION&VIVA-VOCE",
+      "confidence": 0.9837984442710876,
+      "index": 118
+    },
+    {
+      "text": "250",
+      "confidence": 0.9988417625427246,
+      "index": 119
+    },
+    {
+      "text": "100",
+      "confidence": 0.999214231967926,
+      "index": 120
+    },
+    {
+      "text": "VIVA VOCE",
+      "confidence": 0.9632014036178589,
+      "index": 121
+    },
+    {
+      "text": "50",
+      "confidence": 0.9991946220397949,
+      "index": 122
+    },
+    {
+      "text": "20",
+      "confidence": 0.9991680979728699,
+      "index": 123
+    },
+    {
+      "text": "32",
+      "confidence": 0.999364972114563,
+      "index": 124
+    },
+    {
+      "text": "THIRTY TWO",
+      "confidence": 0.9609586000442505,
+      "index": 125
+    },
+    {
+      "text": "DISSERTATION",
+      "confidence": 0.9950075745582581,
+      "index": 126
+    },
+    {
+      "text": "200",
+      "confidence": 0.9993185997009277,
+      "index": 127
+    },
+    {
+      "text": "80",
+      "confidence": 0.9984853267669678,
+      "index": 128
+    },
+    {
+      "text": "159",
+      "confidence": 0.9985818862915039,
+      "index": 129
+    },
+    {
+      "text": "ONE HUNDREDANDFIFTY",
+      "confidence": 0.9769140481948853,
+      "index": 130
+    },
+    {
+      "text": "NINE",
+      "confidence": 0.9972493052482605,
+      "index": 131
+    },
+    {
+      "text": "GRAND TOTAL",
+      "confidence": 0.9499229192733765,
+      "index": 132
+    },
+    {
+      "text": "950",
+      "confidence": 0.9987613558769226,
+      "index": 133
+    },
+    {
+      "text": "475",
+      "confidence": 0.9987664222717285,
+      "index": 134
+    },
+    {
+      "text": "600",
+      "confidence": 0.9994020462036133,
+      "index": 135
+    },
+    {
+      "text": "SpeCIlIzAtIOn:MARKETING&FINANCE",
+      "confidence": 0.7774561643600464,
+      "index": 136
+    },
+    {
+      "text": "Grand Total (in words)",
+      "confidence": 0.9626487493515015,
+      "index": 137
+    },
+    {
+      "text": "SIX HUNDRED",
+      "confidence": 0.9538783431053162,
+      "index": 138
+    },
+    {
+      "text": "600",
+      "confidence": 0.9996662139892578,
+      "index": 139
+    },
+    {
+      "text": "RESULT",
+      "confidence": 0.9549821019172668,
+      "index": 140
+    },
+    {
+      "text": "FIRST CLASS",
+      "confidence": 0.9505121111869812,
+      "index": 141
+    },
+    {
+      "text": "NOTE:",
+      "confidence": 0.9925132989883423,
+      "index": 142
+    },
+    {
+      "text": "INDICATESIMPROVEMENT MARKS.",
+      "confidence": 0.9524075984954834,
+      "index": 143
+    },
+    {
+      "text": "ASSESSMENT)&50% INTHEAGGREGATEOFALLTHE PAPERS",
+      "confidence": 0.9164398312568665,
+      "index": 144
+    },
+    {
+      "text": "THE MINIMUM FORA PASSIN EACH PAPER IS 4O%(EXCLUDINGINTERNAL",
+      "confidence": 0.905108630657196,
+      "index": 145
+    },
+    {
+      "text": "IN THE SEMESTER.",
+      "confidence": 0.9509893655776978,
+      "index": 146
+    },
+    {
+      "text": "abif",
+      "confidence": 0.5913364291191101,
+      "index": 147
+    },
+    {
+      "text": "Signature of tho Candidate",
+      "confidence": 0.9097143411636353,
+      "index": 148
+    },
+    {
+      "text": "Cmunun9a",
+      "confidence": 0.5205575823783875,
+      "index": 150
+    },
+    {
+      "text": "SignatureofthilCierson",
+      "confidence": 0.6895001530647278,
+      "index": 151
+    },
+    {
+      "text": "gistrar(Evaluation)",
+      "confidence": 0.9210601449012756,
+      "index": 152
+    }
+  ]
+}
