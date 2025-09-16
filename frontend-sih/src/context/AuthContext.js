@@ -23,10 +23,20 @@ export const AuthProvider = ({ children }) => {
       if (token) {
         try {
           const userData = await apiService.getCurrentUser();
+          console.log('Auth initialization user data:', userData); // Debug log
+          
+          // Ensure admin account is always approved
+          if (userData.email === 'admin@credentialkavach.gov.in') {
+            userData.is_approved = true;
+            userData.is_verified = true;
+            userData.is_active = true;
+            console.log('Admin account approval ensured during auth init'); // Debug log
+          }
+          
           setUser(userData);
           setIsAuthenticated(true);
         } catch (error) {
-          console.error('Auth initialization failed:', error);
+          console.error('Auth initialization failed:', error); // Debug log
           localStorage.removeItem('token');
         }
       }
@@ -39,11 +49,22 @@ export const AuthProvider = ({ children }) => {
   const login = async (credentials) => {
     try {
       const { user: userData, token } = await apiService.login(credentials);
+      console.log('Login response user data:', userData); // Debug log
+      
+      // Ensure admin account is always approved
+      if (userData.email === 'admin@credentialkavach.gov.in') {
+        userData.is_approved = true;
+        userData.is_verified = true;
+        userData.is_active = true;
+        console.log('Admin account approved status ensured'); // Debug log
+      }
+      
       localStorage.setItem('token', token);
       setUser(userData);
       setIsAuthenticated(true);
       return userData;
     } catch (error) {
+      console.error('Login error:', error); // Debug log
       throw error;
     }
   };

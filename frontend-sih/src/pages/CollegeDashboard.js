@@ -39,7 +39,8 @@ const CollegeDashboard = () => {
 
   const loadData = async () => {
     try {
-      // Mock data for college dashboard
+      // Mock data for college dashboard - Students specific to this college
+      const collegeName = user?.college_name || 'National Institute of Technology';
       const mockStudents = [
         {
           id: '1',
@@ -48,6 +49,7 @@ const CollegeDashboard = () => {
           rollNumber: 'CS001',
           course: 'Computer Science',
           semester: '6',
+          college_name: collegeName,
           documentsCount: 3,
           verifiedCount: 2,
           pendingCount: 1
@@ -59,6 +61,7 @@ const CollegeDashboard = () => {
           rollNumber: 'CS002',
           course: 'Computer Science',
           semester: '6',
+          college_name: collegeName,
           documentsCount: 4,
           verifiedCount: 3,
           pendingCount: 1
@@ -70,8 +73,33 @@ const CollegeDashboard = () => {
           rollNumber: 'EE001',
           course: 'Electrical Engineering',
           semester: '8',
+          college_name: collegeName,
           documentsCount: 5,
           verifiedCount: 4,
+          pendingCount: 1
+        },
+        {
+          id: '4',
+          name: 'Sneha Patel',
+          email: 'sneha@student.com',
+          rollNumber: 'ME001',
+          course: 'Mechanical Engineering',
+          semester: '4',
+          college_name: collegeName,
+          documentsCount: 2,
+          verifiedCount: 1,
+          pendingCount: 1
+        },
+        {
+          id: '5',
+          name: 'Rohit Gupta',
+          email: 'rohit@student.com',
+          rollNumber: 'CE001',
+          course: 'Civil Engineering',
+          semester: '2',
+          college_name: collegeName,
+          documentsCount: 3,
+          verifiedCount: 2,
           pendingCount: 1
         }
       ];
@@ -81,6 +109,7 @@ const CollegeDashboard = () => {
           id: '1',
           studentName: 'Raj Kumar',
           rollNumber: 'CS001',
+          college_name: collegeName,
           title: '10th Marksheet',
           document_type: 'marksheet',
           status: 'pending',
@@ -91,6 +120,7 @@ const CollegeDashboard = () => {
           id: '2',
           studentName: 'Priya Sharma',
           rollNumber: 'CS002',
+          college_name: collegeName,
           title: '12th Certificate',
           document_type: 'certificate',
           status: 'pending',
@@ -101,6 +131,7 @@ const CollegeDashboard = () => {
           id: '3',
           studentName: 'Amit Singh',
           rollNumber: 'EE001',
+          college_name: collegeName,
           title: 'Graduation Certificate',
           document_type: 'certificate',
           status: 'verified',
@@ -109,6 +140,31 @@ const CollegeDashboard = () => {
           verified_by: user?.id,
           verification_notes: 'Document verified successfully',
           uploaded_by: '3'
+        },
+        {
+          id: '4',
+          studentName: 'Sneha Patel',
+          rollNumber: 'ME001',
+          college_name: collegeName,
+          title: 'Transfer Certificate',
+          document_type: 'certificate',
+          status: 'pending',
+          created_at: '2024-01-28T11:30:00Z',
+          uploaded_by: '4'
+        },
+        {
+          id: '5',
+          studentName: 'Rohit Gupta',
+          rollNumber: 'CE001',
+          college_name: collegeName,
+          title: 'Character Certificate',
+          document_type: 'certificate',
+          status: 'verified',
+          created_at: '2024-01-29T14:15:00Z',
+          verification_date: '2024-01-30T09:45:00Z',
+          verified_by: user?.id,
+          verification_notes: 'All details verified and approved',
+          uploaded_by: '5'
         }
       ];
 

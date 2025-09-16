@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { useAuth } from './AuthContext';
+import { useAuth } from '../context/AuthContext';
 
 const ProtectedRoute = ({ children, requiredRole }) => {
   const { isAuthenticated, isLoading, hasRole, user } = useAuth();
@@ -36,34 +36,48 @@ const ProtectedRoute = ({ children, requiredRole }) => {
   }
 
   // Check if user account is approved (for college and government roles)
-  if (user && ['college', 'government'].includes(user.role) && !user.approved_by_admin) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-light">
-        <div className="card text-center max-w-md">
-          <div className="card-header">
-            <h2 className="card-title">Account Pending Approval</h2>
-            <p className="card-subtitle">
-              Your {user.role} account is currently under review by government administrators.
-            </p>
-          </div>
-          <div className="mb-4">
-            <div className="status-badge status-pending">
-              Pending Approval
+  // Skip approval check for the designated admin account
+  if (user && ['college', 'government'].includes(user.role)) {
+    const isAdminAccount = user.email === 'admin@credentialkavach.gov.in';
+    const isApproved = user.is_approved || isAdminAccount; // Admin is always approved
+    
+    console.log('User approval check:', { 
+      email: user.email, 
+      role: user.role, 
+      is_approved: user.is_approved,
+      isAdminAccount,
+      finalApproval: isApproved 
+    }); // Debug log
+    
+    if (!isApproved) {
+      return (
+        <div className="min-h-screen flex items-center justify-center bg-light">
+          <div className="card text-center max-w-md">
+            <div className="card-header">
+              <h2 className="card-title">Account Pending Approval</h2>
+              <p className="card-subtitle">
+                Your {user.role} account is currently under review by government administrators.
+              </p>
             </div>
+            <div className="mb-4">
+              <div className="status-badge status-pending">
+                Pending Approval
+              </div>
+            </div>
+            <p className="text-sm text-gray mb-4">
+              You will receive an email notification once your account has been approved.
+              This process typically takes 1-2 business days.
+            </p>
+            <button
+              onClick={() => window.location.href = '/login'}
+              className="btn btn-primary w-full"
+            >
+              Back to Login
+            </button>
           </div>
-          <p className="text-sm text-gray mb-4">
-            You will receive an email notification once your account has been approved.
-            This process typically takes 1-2 business days.
-          </p>
-          <button
-            onClick={() => window.location.href = '/login'}
-            className="btn btn-primary w-full"
-          >
-            Back to Login
-          </button>
         </div>
-      </div>
-    );
+      );
+    }
   }
 
   // Check email verification (if implemented)

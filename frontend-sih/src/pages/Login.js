@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Shield, Eye, EyeOff, LogIn } from 'lucide-react';
-import { useAuth } from '../utils/AuthContext';
+import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 import Footer from '../components/Footer';
 
@@ -111,6 +111,21 @@ const Login = () => {
               <div className="card-header text-center">
                 <h2 className="card-title">Sign In</h2>
                 <p className="card-subtitle">Use your registered email and password</p>
+                
+                {/* Government Admin Notice */}
+                <div className="admin-notice" style={{
+                  backgroundColor: '#fff3cd',
+                  border: '1px solid #ffeaa7',
+                  borderRadius: '8px',
+                  padding: '12px',
+                  marginTop: '12px',
+                  fontSize: '0.9rem',
+                  color: '#856404'
+                }}>
+                  <strong>Government Dashboard Access:</strong><br />
+                  Email: admin@credentialkavach.gov.in<br />
+                  Password: Admin@123
+                </div>
               </div>
 
               <form onSubmit={handleSubmit} noValidate>

@@ -79,6 +79,10 @@ def signup():
         if data['role'] not in ['student', 'college', 'government']:
             return jsonify({'message': 'Invalid role'}), 400
         
+        # Prevent government registrations (admin account is created automatically)
+        if data['role'] == 'government':
+            return jsonify({'message': 'Government registrations are not allowed. Use the designated admin account.'}), 403
+        
         # Create user based on role
         user_data = {
             'id': str(uuid.uuid4()),
@@ -151,8 +155,53 @@ def login():
         # Find user
         user = User.query.filter_by(email=email).first()
         
-        if not user or not check_password_hash(user.password_hash, password):
-            return jsonify({'message': 'Invalid email or password'}), 401
+        # Special validation for government admin account
+        if email == 'admin@credentialkavach.gov.in':
+            print(f"Admin login attempt for: {email}")
+            if password != 'Admin@123':
+                print("Invalid admin password")
+                return jsonify({'message': 'Invalid admin credentials'}), 401
+            # If admin account doesn't exist in database, create it
+            if not user:
+                try:
+                    from werkzeug.security import generate_password_hash
+                    user = User(
+                        email='admin@credentialkavach.gov.in',
+                        password_hash=generate_password_hash('Admin@123'),
+                        full_name='Government Administrator',
+                        phone='9999999999',
+                        role='government',
+                        department_name='Ministry of Education',
+                        designation='System Administrator',
+                        employee_id='GOV001',
+                        is_verified=True,
+                        is_approved=True,
+                        is_active=True
+                    )
+                    db.session.add(user)
+                    db.session.commit()
+                    print(f"Admin account created successfully: {user.email}")
+                except Exception as e:
+                    db.session.rollback()
+                    print(f"Error creating admin account: {e}")
+                    return jsonify({'message': 'Error creating admin account'}), 500
+            else:
+                print(f"Admin account exists: {user.email}, is_approved: {user.is_approved}")
+                # If admin account exists but is not approved, approve it
+                if not user.is_approved:
+                    try:
+                        user.is_approved = True
+                        user.is_verified = True
+                        user.is_active = True
+                        db.session.commit()
+                        print(f"Admin account approved: {user.email}")
+                    except Exception as e:
+                        db.session.rollback()
+                        print(f"Error approving admin account: {e}")
+                        return jsonify({'message': 'Error approving admin account'}), 500
+        else:
+            if not user or not check_password_hash(user.password_hash, password):
+                return jsonify({'message': 'Invalid email or password'}), 401
         
         if not user.is_active:
             return jsonify({'message': 'Account is deactivated'}), 401
@@ -160,8 +209,16 @@ def login():
         if not user.is_verified:
             return jsonify({'message': 'Please verify your email before logging in'}), 401
         
-        if user.role in ['college', 'government'] and not user.is_approved:
+        # Restrict government access to only the designated admin account
+        if user.role == 'government' and user.email != 'admin@credentialkavach.gov.in':
+            return jsonify({'message': 'Unauthorized government access'}), 403
+        
+        # Skip approval check for the designated admin account
+        if user.role in ['college', 'government'] and not user.is_approved and user.email != 'admin@credentialkavach.gov.in':
+            print(f"User {user.email} is pending approval")
             return jsonify({'message': 'Account pending approval from administrator'}), 401
+        
+        print(f"User {user.email} passed all checks, proceeding with login")
         
         # Create tokens
         access_token = create_access_token(

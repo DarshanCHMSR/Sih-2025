@@ -83,10 +83,45 @@ def create_app():
                 role='government',
                 is_verified=True,
                 is_approved=True,
+                is_active=True,
                 department_name='Department of Higher Education, Jharkhand',
-                designation='System Administrator'
+                designation='System Administrator',
+                employee_id='GOV001'
             )
             db.session.add(admin_user)
             db.session.commit()
+        
+        # Ensure admin account exists and is properly configured
+        admin_user = User.query.filter_by(email='admin@credentialkavach.gov.in').first()
+        if admin_user:
+            # Ensure admin account is always approved and active
+            if not admin_user.is_approved or not admin_user.is_verified or not admin_user.is_active:
+                admin_user.is_approved = True
+                admin_user.is_verified = True
+                admin_user.is_active = True
+                db.session.commit()
+                print("Admin account status verified and updated")
+        else:
+            # Create admin account if it doesn't exist
+            from werkzeug.security import generate_password_hash
+            import uuid
+            
+            admin_user = User(
+                id=str(uuid.uuid4()),
+                email='admin@credentialkavach.gov.in',
+                password_hash=generate_password_hash('Admin@123'),
+                full_name='System Administrator',
+                phone='9999999999',
+                role='government',
+                is_verified=True,
+                is_approved=True,
+                is_active=True,
+                department_name='Department of Higher Education, Jharkhand',
+                designation='System Administrator',
+                employee_id='GOV001'
+            )
+            db.session.add(admin_user)
+            db.session.commit()
+            print("Admin account created during app initialization")
     
     return app

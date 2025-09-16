@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Shield, Eye, EyeOff, UserPlus } from 'lucide-react';
-import { useAuth } from '../utils/AuthContext';
+import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 import Footer from '../components/Footer';
 
@@ -93,6 +93,11 @@ const Signup = () => {
     // Common validation
     if (!formData.role) {
       newErrors.role = 'Please select a role';
+    }
+    
+    // Prevent government registration
+    if (formData.role === 'government') {
+      newErrors.role = 'Government registrations are not allowed. Use the designated admin account.';
     }
     
     if (!formData.email) {
@@ -446,15 +451,17 @@ const Signup = () => {
                     {[
                       { value: 'student', label: 'Student', desc: 'Verify your academic documents' },
                       { value: 'college', label: 'College', desc: 'Manage institutional records' },
-                      { value: 'government', label: 'Government', desc: 'Administrative access' }
+                      { value: 'government', label: 'Government', desc: 'Use designated admin account', disabled: true }
                     ].map((role) => (
                       <div
                         key={role.value}
-                        onClick={() => handleRoleChange(role.value)}
-                        className={`p-4 border-2 rounded-lg cursor-pointer text-center transition-all ${
-                          selectedRole === role.value
-                            ? 'border-primary bg-orange-50 text-primary'
-                            : 'border-gray-200 hover:border-gray-300'
+                        onClick={() => !role.disabled && handleRoleChange(role.value)}
+                        className={`p-4 border-2 rounded-lg text-center transition-all ${
+                          role.disabled 
+                            ? 'border-gray-200 bg-gray-100 cursor-not-allowed opacity-60'
+                            : selectedRole === role.value
+                            ? 'border-primary bg-orange-50 text-primary cursor-pointer'
+                            : 'border-gray-200 hover:border-gray-300 cursor-pointer'
                         }`}
                       >
                         <div className="font-medium">{role.label}</div>
@@ -463,6 +470,20 @@ const Signup = () => {
                     ))}
                   </div>
                   {errors.role && <div className="form-error">{errors.role}</div>}
+                  
+                  {/* Government Access Notice */}
+                  <div className="gov-notice" style={{
+                    backgroundColor: '#e3f2fd',
+                    border: '1px solid #bbdefb',
+                    borderRadius: '8px',
+                    padding: '12px',
+                    marginTop: '8px',
+                    fontSize: '0.85rem',
+                    color: '#1565c0'
+                  }}>
+                    <strong>Note:</strong> Government dashboard access is restricted to the designated system administrator account. 
+                    Use the login form with the provided admin credentials.
+                  </div>
                 </div>
 
                 {/* Email Field */}
