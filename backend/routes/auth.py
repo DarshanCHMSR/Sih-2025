@@ -54,7 +54,7 @@ def signup():
         data = request.get_json()
         
         # Validate required fields
-        required_fields = ['email', 'password', 'fullName', 'phone', 'role']
+        required_fields = ['email', 'password', 'role']
         for field in required_fields:
             if not data.get(field):
                 return jsonify({'message': f'{field} is required'}), 400
@@ -63,8 +63,8 @@ def signup():
         if not validate_email(data['email']):
             return jsonify({'message': 'Invalid email format'}), 400
         
-        # Validate phone number
-        if not validate_phone(data['phone']):
+        # Validate phone number if provided
+        if data.get('phone') and not validate_phone(data['phone']):
             return jsonify({'message': 'Invalid phone number format'}), 400
         
         # Validate password strength
@@ -84,51 +84,39 @@ def signup():
             'id': str(uuid.uuid4()),
             'email': data['email'],
             'password_hash': generate_password_hash(data['password']),
-            'full_name': data['fullName'],
-            'phone': data['phone'],
+            'full_name': data.get('name', ''),
+            'phone': data.get('phone', ''),
             'role': data['role'],
-            'verification_token': str(uuid.uuid4())
+            'verification_token': str(uuid.uuid4()),
+            'is_verified': True,  # Skip email verification for demo
+            'is_approved': True if data['role'] == 'student' else False  # Auto-approve students
         }
         
         # Role-specific fields
         if data['role'] == 'student':
-            required_student_fields = ['dob', 'rollNumber', 'collegeName', 'course', 'yearOfStudy']
-            for field in required_student_fields:
-                if not data.get(field):
-                    return jsonify({'message': f'{field} is required for students'}), 400
-            
             user_data.update({
-                'date_of_birth': datetime.strptime(data['dob'], '%Y-%m-%d').date(),
-                'roll_number': data['rollNumber'],
-                'college_name': data['collegeName'],
-                'course': data['course'],
-                'year_of_study': data['yearOfStudy']
+                'roll_number': data.get('enrollment_number', ''),
+                'college_name': data.get('institution', ''),
+                'course': data.get('program', ''),
+                'year_of_study': data.get('semester', '')
             })
             
         elif data['role'] == 'college':
-            required_college_fields = ['collegeName', 'collegeCode', 'address', 'university', 'adminName']
-            for field in required_college_fields:
-                if not data.get(field):
-                    return jsonify({'message': f'{field} is required for colleges'}), 400
-            
             user_data.update({
-                'college_name': data['collegeName'],
-                'college_code': data['collegeCode'],
-                'address': data['address'],
-                'university': data['university'],
-                'admin_name': data['adminName']
+                'college_name': data.get('college_name', ''),
+                'college_code': data.get('registration_number', ''),
+                'address': data.get('address', ''),
+                'university': data.get('affiliation', ''),
+                'admin_name': data.get('contact_person', ''),
+                'designation': data.get('designation', '')
             })
             
         elif data['role'] == 'government':
-            required_govt_fields = ['departmentName', 'designation', 'employeeId']
-            for field in required_govt_fields:
-                if not data.get(field):
-                    return jsonify({'message': f'{field} is required for government users'}), 400
-            
             user_data.update({
-                'department_name': data['departmentName'],
-                'designation': data['designation'],
-                'employee_id': data['employeeId']
+                'department_name': data.get('department', ''),
+                'designation': data.get('designation', ''),
+                'employee_id': data.get('employee_id', ''),
+                'address': data.get('office_address', '')
             })
         
         # Create user
