@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - New India Credential Kavach</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23ff6600'/><text x='50%' y='50%' text-anchor='middle' dy='.35em' fill='white' font-size='40' font-family='Arial'>🛡️</text></svg>">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='white'/><circle cx='50' cy='50' r='35' fill='%23ff6600'/><text x='50%' y='50%' text-anchor='middle' dy='.35em' fill='white' font-size='30' font-family='Arial'>🛡️</text></svg>" alt="Kavach Logo">
+                <div class="logo-text">
+                    <h1>Student Dashboard</h1>
+                    <p>New India Credential Kavach</p>
+                </div>
+            </div>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="#" id="userName">Profile</a></li>
+                    <li><a href="#" onclick="logout()">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Dashboard Section -->
+    <section class="dashboard">
+        <div class="container">
+            <div class="dashboard-header fade-in">
+                <h2>Welcome, <span id="studentName">Student</span>!</h2>
+                <p>Manage your academic credentials securely</p>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- Upload Documents -->
+                <div class="dashboard-card fade-in">
+                    <div class="card-header">
+                        <div class="card-icon">📄</div>
+                        <h3>Upload Documents</h3>
+                    </div>
+                    <p>Upload your marksheets and certificates for verification</p>
+                    <button class="btn btn-primary" onclick="showUploadModal()">
+                        Upload New Document
+                    </button>
+                </div>
+
+                <!-- My Documents -->
+                <div class="dashboard-card fade-in">
+                    <div class="card-header">
+                        <div class="card-icon">📁</div>
+                        <h3>My Documents</h3>
+                    </div>
+                    <p>View and manage your uploaded documents</p>
+                    <div id="documentsList">
+                        <!-- Documents will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Verification Status -->
+                <div class="dashboard-card fade-in">
+                    <div class="card-header">
+                        <div class="card-icon">✅</div>
+                        <h3>Verification Status</h3>
+                    </div>
+                    <p>Track the status of your document verifications</p>
+                    <div id="verificationStatus">
+                        <!-- Status will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Share Credentials -->
+                <div class="dashboard-card fade-in">
+                    <div class="card-header">
+                        <div class="card-icon">🔗</div>
+                        <h3>Share Credentials</h3>
+                    </div>
+                    <p>Generate secure links to share verified credentials</p>
+                    <button class="btn btn-secondary" onclick="generateShareLink()">
+                        Generate Share Link
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Upload Modal -->
+    <div id="uploadModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Upload Document</h3>
+                <span class="close" onclick="closeUploadModal()">&times;</span>
+            </div>
+            <form id="uploadForm">
+                <div class="form-group">
+                    <label for="documentType">Document Type</label>
+                    <select id="documentType" name="documentType" class="form-control" required>
+                        <option value="">Select document type</option>
+                        <option value="marksheet">Marksheet</option>
+                        <option value="certificate">Certificate</option>
+                        <option value="diploma">Diploma</option>
+                        <option value="transcript">Transcript</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="documentFile">Choose File</label>
+                    <div class="file-upload">
+                        <input type="file" id="documentFile" name="documentFile" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <label for="documentFile" class="file-upload-label">
+                            📎 Click to choose file or drag and drop
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description (Optional)</label>
+                    <textarea id="description" name="description" class="form-control" rows="3" placeholder="Add any additional details about this document"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    Upload Document
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 New India Credential Kavach | Government of Jharkhand</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/student-dashboard.js"></script>
+</body>
+</html>
+
+<style>
+/* Modal Styles */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: white;
+    max-width: 500px;
+    width: 90%;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: var(--shadow-hover);
+}
+
+.modal-header {
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    color: white;
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    margin: 0;
+}
+
+.close {
+    font-size: 1.5rem;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: white;
+}
+
+.modal-content form {
+    padding: 2rem;
+}
+
+/* Document List Styles */
+.document-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.document-info h4 {
+    margin: 0 0 0.5rem 0;
+    color: var(--dark-blue);
+}
+
+.document-info p {
+    margin: 0;
+    color: var(--dark-gray);
+    font-size: 0.9rem;
+}
+
+.document-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+}
+</style>

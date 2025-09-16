@@ -12,6 +12,12 @@ import logging
 from typing import List, Dict, Any, Optional, Tuple
 from dataclasses import dataclass, asdict
 from paddlex import create_pipeline
+try:
+    # When imported as a module (e.g., from Flask app)
+    from .preprocessing import preprocess_image
+except Exception:
+    # When run directly as a script
+    from preprocessing import preprocess_image
 import argparse
 
 # Setup logging
@@ -250,12 +256,32 @@ class MarksCardOCRSystem:
         
         return total_marks, result, division
     
-    def process_marks_card(self, image_path: str) -> MarksCardData:
+    def process_marks_card(self, image_path: str, *, preprocess: bool = True,
+                           do_deskew: bool = True, do_denoise: bool = True,
+                           use_adaptive: bool = True, contrast: bool = True,
+                           temp_dir: Optional[str] = None) -> MarksCardData:
         """Process complete marks card and return structured data."""
         logger.info(f"🎯 Processing marks card: {image_path}")
+
+        # Optional preprocessing with OpenCV
+        img_for_ocr = image_path
+        if preprocess:
+            try:
+                img_for_ocr = preprocess_image(
+                    image_path,
+                    do_deskew=do_deskew,
+                    do_denoise=do_denoise,
+                    use_adaptive=use_adaptive,
+                    contrast=contrast,
+                    output_dir=temp_dir
+                )
+                logger.info(f"🧪 Preprocessed image saved: {img_for_ocr}")
+            except Exception as e:
+                logger.warning(f"⚠️ Preprocessing failed ({e}), falling back to original image")
+                img_for_ocr = image_path
         
         # Extract raw text
-        text_elements = self.extract_raw_text(image_path)
+        text_elements = self.extract_raw_text(img_for_ocr)
         
         if not text_elements:
             logger.error("❌ No text elements extracted")
@@ -335,6 +361,13 @@ def main():
     parser.add_argument('image_path', help='Path to the marks card image')
     parser.add_argument('-o', '--output', default='results', help='Output directory')
     parser.add_argument('-c', '--confidence', type=float, default=0.5, help='Confidence threshold')
+    # Preprocessing flags
+    parser.add_argument('--no-preprocess', action='store_true', help='Disable OpenCV preprocessing')
+    parser.add_argument('--no-deskew', action='store_true', help='Disable deskew step in preprocessing')
+    parser.add_argument('--no-denoise', action='store_true', help='Disable denoise step in preprocessing')
+    parser.add_argument('--otsu', action='store_true', help='Use Otsu threshold instead of adaptive')
+    parser.add_argument('--no-contrast', action='store_true', help='Disable CLAHE contrast enhancement')
+    parser.add_argument('--temp-dir', default=None, help='Directory to store preprocessed image')
     
     args = parser.parse_args()
     
@@ -347,7 +380,15 @@ def main():
         ocr_system = MarksCardOCRSystem(confidence_threshold=args.confidence)
         
         # Process marks card
-        marks_data = ocr_system.process_marks_card(args.image_path)
+        marks_data = ocr_system.process_marks_card(
+            args.image_path,
+            preprocess=not args.no_preprocess,
+            do_deskew=not args.no_deskew,
+            do_denoise=not args.no_denoise,
+            use_adaptive=not args.otsu,
+            contrast=not args.no_contrast,
+            temp_dir=args.temp_dir
+        )
         
         # Save results
         ocr_system.save_results(marks_data, args.output)

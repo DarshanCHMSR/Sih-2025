@@ -38,12 +38,3 @@ debug_*.py
 # Temporary results (keep final_results as example)
 results.json
 simple_results.json
-
-# Flask runtime artifacts
-backend/uploads/
-backend/web_results/
-backend/__pycache__/
-backend/*.pyc
-
-
-frontend-sih/node_modules/
