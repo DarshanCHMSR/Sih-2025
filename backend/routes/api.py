@@ -318,6 +318,46 @@ def download_document(document_id):
     except Exception as e:
         return jsonify({'message': 'Download failed', 'error': str(e)}), 500
 
+@api_bp.route('/documents/<document_id>/ocr', methods=['GET'])
+@jwt_required()
+def get_document_ocr(document_id):
+    """Get OCR extracted data for a specific document"""
+    try:
+        current_user_id = get_jwt_identity()
+        user = User.query.get(current_user_id)
+        
+        if not user:
+            return jsonify({'message': 'User not found'}), 404
+        
+        document = Document.query.get(document_id)
+        
+        if not document:
+            return jsonify({'message': 'Document not found'}), 404
+        
+        # Check permissions
+        if user.role == 'student' and document.uploaded_by != current_user_id:
+            return jsonify({'message': 'Access denied'}), 403
+        
+        # Return OCR data
+        response_data = {
+            'document_id': document.id,
+            'title': document.title,
+            'document_type': document.document_type,
+            'ocr_data': document.ocr_data,
+            'extracted_text': document.extracted_text,
+            'has_ocr_data': document.ocr_data is not None
+        }
+        
+        # Log OCR view action
+        log_user_action(current_user_id, 'document_ocr_view', 
+                       {'document_id': document_id}, 
+                       'document', document_id)
+        
+        return jsonify(response_data), 200
+        
+    except Exception as e:
+        return jsonify({'message': 'Failed to get OCR data', 'error': str(e)}), 500
+
 @api_bp.route('/stats', methods=['GET'])
 @jwt_required()
 def get_stats():

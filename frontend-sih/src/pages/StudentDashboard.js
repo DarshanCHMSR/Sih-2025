@@ -27,6 +27,9 @@ const StudentDashboard = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [dragActive, setDragActive] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
+  const [viewingDocument, setViewingDocument] = useState(null);
+  const [ocrData, setOcrData] = useState(null);
+  const [ocrLoading, setOcrLoading] = useState(false);
 
   useEffect(() => {
     loadDocuments();
@@ -34,37 +37,25 @@ const StudentDashboard = () => {
 
   const loadDocuments = async () => {
     try {
-      // Mock data for now since OCR endpoints aren't ready
-      const mockDocuments = [
-        {
-          id: '1',
-          title: '10th Marksheet',
-          document_type: 'marksheet',
-          status: 'verified',
-          created_at: '2024-01-15T10:30:00Z',
-          verification_date: '2024-01-16T14:20:00Z',
-          verification_notes: 'All details verified successfully'
-        },
-        {
-          id: '2',
-          title: '12th Certificate',
-          document_type: 'certificate',
-          status: 'pending',
-          created_at: '2024-01-20T09:15:00Z'
-        },
-        {
-          id: '3',
-          title: 'Graduation Certificate',
-          document_type: 'certificate',
-          status: 'rejected',
-          created_at: '2024-01-25T16:45:00Z',
-          verification_notes: 'Image quality too low, please re-upload'
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://localhost:5001/api/documents', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
         }
-      ];
-      setDocuments(mockDocuments);
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setDocuments(data.documents || []);
+      } else {
+        console.error('Failed to load documents');
+        setDocuments([]);
+      }
       setLoading(false);
     } catch (error) {
       console.error('Error loading documents:', error);
+      setDocuments([]);
       setLoading(false);
     }
   };
@@ -107,25 +98,95 @@ const StudentDashboard = () => {
   const handleUpload = async () => {
     if (!selectedFile) return;
 
-    // Mock upload progress
-    for (let i = 0; i <= 100; i += 10) {
-      setUploadProgress(i);
-      await new Promise(resolve => setTimeout(resolve, 100));
+    try {
+      setUploadProgress(10);
+      
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+      formData.append('title', selectedFile.name);
+      formData.append('document_type', getDocumentType(selectedFile.name));
+      formData.append('description', `Uploaded ${selectedFile.name}`);
+
+      const token = localStorage.getItem('token');
+      
+      setUploadProgress(50);
+      
+      const response = await fetch('http://localhost:5001/api/documents/upload', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: formData
+      });
+
+      setUploadProgress(80);
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Upload successful:', data);
+        
+        // Reload documents to get the updated list
+        await loadDocuments();
+        
+        setUploadProgress(100);
+        setTimeout(() => {
+          setSelectedFile(null);
+          setUploadProgress(0);
+          setActiveTab('documents');
+        }, 1000);
+      } else {
+        const errorData = await response.json();
+        console.error('Upload failed:', errorData);
+        alert(`Upload failed: ${errorData.message}`);
+        setUploadProgress(0);
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+      alert('Upload failed. Please try again.');
+      setUploadProgress(0);
     }
+  };
 
-    // Add to documents list
-    const newDocument = {
-      id: Date.now().toString(),
-      title: selectedFile.name,
-      document_type: 'document',
-      status: 'pending',
-      created_at: new Date().toISOString()
-    };
+  const getDocumentType = (filename) => {
+    const name = filename.toLowerCase();
+    if (name.includes('marksheet') || name.includes('marks')) return 'marksheet';
+    if (name.includes('certificate') || name.includes('cert')) return 'certificate';
+    if (name.includes('diploma')) return 'diploma';
+    return 'document';
+  };
 
-    setDocuments([newDocument, ...documents]);
-    setSelectedFile(null);
-    setUploadProgress(0);
-    setActiveTab('documents');
+  const viewDocument = async (document) => {
+    setViewingDocument(document);
+    setOcrLoading(true);
+    setOcrData(null);
+
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`http://localhost:5001/api/documents/${document.id}/ocr`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setOcrData(data);
+      } else {
+        console.error('Failed to load OCR data');
+        setOcrData({ error: 'Failed to load OCR data' });
+      }
+    } catch (error) {
+      console.error('Error loading OCR data:', error);
+      setOcrData({ error: 'Error loading OCR data' });
+    } finally {
+      setOcrLoading(false);
+    }
+  };
+
+  const closeDocumentView = () => {
+    setViewingDocument(null);
+    setOcrData(null);
   };
 
   const getStatusColor = (status) => {
@@ -405,9 +466,12 @@ const StudentDashboard = () => {
                           )}
                         </div>
                         <div className="doc-actions">
-                          <button className="action-btn">
+                          <button 
+                            className="action-btn"
+                            onClick={() => viewDocument(doc)}
+                          >
                             <Eye size={16} />
-                            View
+                            View OCR Data
                           </button>
                         </div>
                       </div>
@@ -419,6 +483,119 @@ const StudentDashboard = () => {
           </section>
         </div>
       </main>
+
+      {/* OCR Data Modal */}
+      {viewingDocument && (
+        <div className="modal-overlay" onClick={closeDocumentView}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>OCR Extracted Data - {viewingDocument.title}</h3>
+              <button className="modal-close" onClick={closeDocumentView}>×</button>
+            </div>
+            
+            <div className="modal-body">
+              {ocrLoading ? (
+                <div className="loading-ocr">
+                  <div className="loading-spinner"></div>
+                  <p>Processing OCR data...</p>
+                </div>
+              ) : ocrData?.error ? (
+                <div className="ocr-error">
+                  <XCircle size={48} color="#ef4444" />
+                  <h4>Error Loading OCR Data</h4>
+                  <p>{ocrData.error}</p>
+                </div>
+              ) : ocrData?.has_ocr_data ? (
+                <div className="ocr-results">
+                  <div className="ocr-section">
+                    <h4>Document Information</h4>
+                    <div className="ocr-grid">
+                      <div className="ocr-item">
+                        <strong>Document Type:</strong>
+                        <span>{viewingDocument.document_type}</span>
+                      </div>
+                      <div className="ocr-item">
+                        <strong>Status:</strong>
+                        <span className={`status ${viewingDocument.status}`}>
+                          {viewingDocument.status}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {ocrData.ocr_data && (
+                    <div className="ocr-section">
+                      <h4>Extracted Information</h4>
+                      <div className="ocr-grid">
+                        {ocrData.ocr_data.university && (
+                          <div className="ocr-item">
+                            <strong>University:</strong>
+                            <span>{ocrData.ocr_data.university}</span>
+                          </div>
+                        )}
+                        {ocrData.ocr_data.student_name && (
+                          <div className="ocr-item">
+                            <strong>Student Name:</strong>
+                            <span>{ocrData.ocr_data.student_name}</span>
+                          </div>
+                        )}
+                        {ocrData.ocr_data.roll_number && (
+                          <div className="ocr-item">
+                            <strong>Roll Number:</strong>
+                            <span>{ocrData.ocr_data.roll_number}</span>
+                          </div>
+                        )}
+                        {ocrData.ocr_data.result && (
+                          <div className="ocr-item">
+                            <strong>Result:</strong>
+                            <span>{ocrData.ocr_data.result}</span>
+                          </div>
+                        )}
+                      </div>
+
+                      {ocrData.ocr_data.subjects && ocrData.ocr_data.subjects.length > 0 && (
+                        <div className="subjects-section">
+                          <h5>Subjects & Marks</h5>
+                          <div className="subjects-table">
+                            {ocrData.ocr_data.subjects.map((subject, index) => (
+                              <div key={index} className="subject-row">
+                                <span className="subject-code">{subject.course_code}</span>
+                                <span className="subject-title">{subject.course_title}</span>
+                                <span className="subject-marks">{subject.marks}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {ocrData.extracted_text && (
+                    <div className="ocr-section">
+                      <h4>Extracted Text</h4>
+                      <div className="extracted-text">
+                        {ocrData.extracted_text}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="no-ocr-data">
+                  <FileText size={48} color="#9ca3af" />
+                  <h4>No OCR Data Available</h4>
+                  <p>This document hasn't been processed through OCR yet, or OCR processing failed.</p>
+                </div>
+              )}
+            </div>
+
+            <div className="modal-footer">
+              <button className="secondary-btn" onClick={closeDocumentView}>
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,0 +1,23 @@
+{
+  "ocr_data": {
+    "university": "UNIVERSITY OF KASHMIR, SRINAGAR",
+    "student_name": null,
+    "roll_number": null,
+    "subjects": [
+      {
+        "course_code": "HBA483",
+        "course_title": "Projeat Roport",
+        "marks": null
+      },
+      {
+        "course_code": "HBA494",
+        "course_title": "Coaprehenssve Vsya.",
+        "marks": null
+      }
+    ],
+    "result": null,
+    "total_elements": 60
+  },
+  "extracted_text": "UNIVERSITY OF KASHMIR, SRINAGAR MARKS CERTIFICATE 10260 ubject PaenHA\u00b7AHADA Rog.NO...3-A0-2 BotchSonsion Regula/PtatezuA. DETAILS OF MARKS Coune/Te CortrasAssumr TOUM Dustneas Legieetion 22 3* App.Dorelopent Uesag Oracle 4 43 HBA483 Projeat Roport HBA494 Coaprehenssve Vsya. 3105 Working Capital Hanateaent 30 2 BA31 Btrategso Harkering 34 39 Tatait Reuh: Theery Ca Asruoret  Cem. Ty Ist Grund Taa ( Figam) 2nd 15 29 444 454 14 26% 480 298 SYTHOUSANSEN HUNDRED FOUR Dirisiens Yotst $4 11170 18 2\u4fe1-OCT08R-269 right or peoge bndde os te pr onof this mas whee does not coofer LNIERSTTYCAMIPLS SRENAGAR-6 cerifcate whch wilt be p",
+  "test_successful": true
+}
