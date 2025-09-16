@@ -1,29 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Shield, FileCheck, Users, Database, Zap, Award } from 'lucide-react';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 const Landing = () => {
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <header className="header">
-        <div className="container">
-          <div className="logo-section">
-            <Shield size={40} />
-            <div>
-              <h1 className="logo-text">New India Credential Kavach</h1>
-              <p className="government-text">Government of Jharkhand</p>
-            </div>
-          </div>
-          
-          <nav>
-            <ul className="nav-links">
-              <li><Link to="/login">Login</Link></li>
-              <li><Link to="/signup">Sign Up</Link></li>
-            </ul>
-          </nav>
-        </div>
-      </header>
+      <Header />
 
       {/* Hero Section */}
       <section className="hero">
@@ -35,20 +20,16 @@ const Landing = () => {
             Secure, transparent, and efficient credential verification system 
             for the digital age - powered by Government of Jharkhand
           </p>
-          
           <div className="flex justify-center gap-4 mt-8">
-            <Link to="/signup" className="btn btn-secondary">
-              Get Started
-            </Link>
-            <Link to="/login" className="btn btn-outline">
-              Sign In
-            </Link>
+            <a href="#features" className="btn btn-secondary">
+              Explore Features
+            </a>
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="py-16 bg-white">
+      <section id="features" className="py-16 bg-white">
         <div className="container">
           <div className="text-center mb-12">
             <h3 className="text-3xl font-bold text-navy mb-4">
@@ -119,7 +100,7 @@ const Landing = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-light">
+      <section className="py-16 bg-light" id="contact">
         <div className="container text-center">
           <h3 className="text-3xl font-bold text-navy mb-4">
             Ready to Get Started?
@@ -135,9 +116,6 @@ const Landing = () => {
               <p className="text-gray mb-4">
                 Upload and verify your academic documents instantly
               </p>
-              <Link to="/signup?role=student" className="btn btn-primary w-full">
-                Student Signup
-              </Link>
             </div>
 
             <div className="card text-center">
@@ -145,9 +123,6 @@ const Landing = () => {
               <p className="text-gray mb-4">
                 Verify student credentials and manage institutional records
               </p>
-              <Link to="/signup?role=college" className="btn btn-success w-full">
-                College Signup
-              </Link>
             </div>
 
             <div className="card text-center">
@@ -155,16 +130,14 @@ const Landing = () => {
               <p className="text-gray mb-4">
                 Administrative access for system oversight and management
               </p>
-              <Link to="/signup?role=government" className="btn btn-secondary w-full">
-                Government Access
-              </Link>
             </div>
           </div>
+          <p className="text-sm text-gray mt-6">Use the Sign In link in the top navigation to access your dashboard.</p>
         </div>
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 bg-white">
+      <section id="stats" className="py-16 bg-white">
         <div className="container">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
             <div>
@@ -188,52 +161,7 @@ const Landing = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-navy text-white py-12">
-        <div className="container">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div>
-              <div className="flex items-center gap-3 mb-4">
-                <Shield size={32} />
-                <div>
-                  <h4 className="font-bold">New India Credential Kavach</h4>
-                  <p className="text-sm opacity-80">Government of Jharkhand</p>
-                </div>
-              </div>
-              <p className="text-sm opacity-80">
-                Secure digital credential verification platform ensuring 
-                authenticity and preventing educational fraud.
-              </p>
-            </div>
-
-            <div>
-              <h5 className="font-semibold mb-4">Quick Links</h5>
-              <ul className="space-y-2 text-sm">
-                <li><Link to="/signup" className="hover:text-primary">Get Started</Link></li>
-                <li><Link to="/login" className="hover:text-primary">Sign In</Link></li>
-                <li><a href="#features" className="hover:text-primary">Features</a></li>
-                <li><a href="#contact" className="hover:text-primary">Contact Us</a></li>
-              </ul>
-            </div>
-
-            <div>
-              <h5 className="font-semibold mb-4">Government Links</h5>
-              <ul className="space-y-2 text-sm">
-                <li><a href="https://jharkhand.gov.in" className="hover:text-primary">Jharkhand Government</a></li>
-                <li><a href="https://digitalindia.gov.in" className="hover:text-primary">Digital India</a></li>
-                <li><a href="#privacy" className="hover:text-primary">Privacy Policy</a></li>
-                <li><a href="#terms" className="hover:text-primary">Terms of Service</a></li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="border-t border-gray-600 mt-8 pt-8 text-center">
-            <p className="text-sm opacity-80">
-              © 2025 Government of Jharkhand. All rights reserved. 
-              Built for Digital India Initiative.
-            </p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

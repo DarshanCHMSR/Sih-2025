@@ -3,6 +3,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Shield, Eye, EyeOff, UserPlus } from 'lucide-react';
 import { useAuth } from '../utils/AuthContext';
 import toast from 'react-hot-toast';
+import Footer from '../components/Footer';
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -21,7 +22,6 @@ const Signup = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
-  // Role-specific fields
   const [roleFields, setRoleFields] = useState({});
 
   useEffect(() => {
@@ -411,183 +411,173 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-light flex items-center justify-center py-12 px-4">
-      <div className="w-full max-w-2xl">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center gap-3 text-navy hover:text-primary">
-            <Shield size={40} />
-            <div className="text-left">
-              <h1 className="text-xl font-bold">New India Credential Kavach</h1>
-              <p className="text-sm text-gray">Government of Jharkhand</p>
+    <div className="min-h-screen bg-light flex flex-col justify-between">
+      <div className="auth-hero">
+        <div className="container">
+          <div className="auth-grid">
+            <div className="auth-info">
+              <div className="logo-section mb-6">
+                <Shield size={40} />
+                <div>
+                  <h1 className="logo-text">New India Credential Kavach</h1>
+                  <p className="government-text">Government of Jharkhand</p>
+                </div>
+              </div>
+              <h2 className="auth-title">Create Your Account</h2>
+              <p className="auth-subtitle">Join the secure credential verification platform</p>
+              <ul className="auth-points">
+                <li>Role-based secure access</li>
+                <li>Fast verification workflow</li>
+                <li>Trusted by institutions</li>
+              </ul>
             </div>
-          </Link>
-        </div>
 
-        {/* Signup Card */}
-        <div className="card">
-          <div className="card-header text-center">
-            <h2 className="card-title">Create Your Account</h2>
-            <p className="card-subtitle">Join the secure credential verification platform</p>
-          </div>
+            <div className="auth-card card">
+              <div className="card-header text-center">
+                <h2 className="card-title">Sign Up</h2>
+                <p className="card-subtitle">Choose your role and fill the details</p>
+              </div>
 
-          <form onSubmit={handleSubmit} noValidate>
-            {/* Role Selection */}
-            <div className="form-group">
-              <label className="form-label">Select Your Role *</label>
-              <div className="grid grid-cols-3 gap-3">
-                {[
-                  { value: 'student', label: 'Student', desc: 'Verify your academic documents' },
-                  { value: 'college', label: 'College', desc: 'Manage institutional records' },
-                  { value: 'government', label: 'Government', desc: 'Administrative access' }
-                ].map((role) => (
-                  <div
-                    key={role.value}
-                    onClick={() => handleRoleChange(role.value)}
-                    className={`p-4 border-2 rounded-lg cursor-pointer text-center transition-all ${
-                      selectedRole === role.value
-                        ? 'border-primary bg-orange-50 text-primary'
-                        : 'border-gray-200 hover:border-gray-300'
-                    }`}
-                  >
-                    <div className="font-medium">{role.label}</div>
-                    <div className="text-xs text-gray mt-1">{role.desc}</div>
+              <form onSubmit={handleSubmit} noValidate>
+                {/* Role Selection */}
+                <div className="form-group">
+                  <label className="form-label">Select Your Role *</label>
+                  <div className="grid grid-cols-3 gap-3">
+                    {[
+                      { value: 'student', label: 'Student', desc: 'Verify your academic documents' },
+                      { value: 'college', label: 'College', desc: 'Manage institutional records' },
+                      { value: 'government', label: 'Government', desc: 'Administrative access' }
+                    ].map((role) => (
+                      <div
+                        key={role.value}
+                        onClick={() => handleRoleChange(role.value)}
+                        className={`p-4 border-2 rounded-lg cursor-pointer text-center transition-all ${
+                          selectedRole === role.value
+                            ? 'border-primary bg-orange-50 text-primary'
+                            : 'border-gray-200 hover:border-gray-300'
+                        }`}
+                      >
+                        <div className="font-medium">{role.label}</div>
+                        <div className="text-xs text-gray mt-1">{role.desc}</div>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-              {errors.role && <div className="form-error">{errors.role}</div>}
-            </div>
+                  {errors.role && <div className="form-error">{errors.role}</div>}
+                </div>
 
-            {/* Email Field */}
-            <div className="form-group">
-              <label htmlFor="email" className="form-label">Email Address *</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                className={`form-input ${errors.email ? 'border-red-500' : ''}`}
-                placeholder="Enter your email address"
-                required
-              />
-              {errors.email && <div className="form-error">{errors.email}</div>}
-            </div>
-
-            {/* Password Fields */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="form-group">
-                <label htmlFor="password" className="form-label">Password *</label>
-                <div className="relative">
+                {/* Email Field */}
+                <div className="form-group">
+                  <label htmlFor="email" className="form-label">Email Address *</label>
                   <input
-                    type={showPassword ? 'text' : 'password'}
-                    id="password"
-                    name="password"
-                    value={formData.password}
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
                     onChange={handleChange}
-                    className={`form-input pr-12 ${errors.password ? 'border-red-500' : ''}`}
-                    placeholder="Enter password"
+                    className={`form-input ${errors.email ? 'border-red-500' : ''}`}
+                    placeholder="Enter your email address"
                     required
                   />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                  >
-                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                  </button>
+                  {errors.email && <div className="form-error">{errors.email}</div>}
                 </div>
-                {errors.password && <div className="form-error">{errors.password}</div>}
-              </div>
 
-              <div className="form-group">
-                <label htmlFor="confirmPassword" className="form-label">Confirm Password *</label>
-                <div className="relative">
-                  <input
-                    type={showConfirmPassword ? 'text' : 'password'}
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    value={formData.confirmPassword}
-                    onChange={handleChange}
-                    className={`form-input pr-12 ${errors.confirmPassword ? 'border-red-500' : ''}`}
-                    placeholder="Confirm password"
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                  >
-                    {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                  </button>
+                {/* Password Fields */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="form-group">
+                    <label htmlFor="password" className="form-label">Password *</label>
+                    <div className="relative">
+                      <input
+                        type={showPassword ? 'text' : 'password'}
+                        id="password"
+                        name="password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        className={`form-input pr-12 ${errors.password ? 'border-red-500' : ''}`}
+                        placeholder="Enter password"
+                        required
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="password-toggle"
+                      >
+                        {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                      </button>
+                    </div>
+                    {errors.password && <div className="form-error">{errors.password}</div>}
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="confirmPassword" className="form-label">Confirm Password *</label>
+                    <div className="relative">
+                      <input
+                        type={showConfirmPassword ? 'text' : 'password'}
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        value={formData.confirmPassword}
+                        onChange={handleChange}
+                        className={`form-input pr-12 ${errors.confirmPassword ? 'border-red-500' : ''}`}
+                        placeholder="Confirm password"
+                        required
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        className="password-toggle"
+                      >
+                        {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                      </button>
+                    </div>
+                    {errors.confirmPassword && <div className="form-error">{errors.confirmPassword}</div>}
+                  </div>
                 </div>
-                {errors.confirmPassword && <div className="form-error">{errors.confirmPassword}</div>}
-              </div>
+
+                {/* Role-specific Fields */}
+                {selectedRole && (
+                  <div className="border-t pt-6 mt-6">
+                    <h3 className="text-lg font-medium text-navy mb-4">
+                      {selectedRole.charAt(0).toUpperCase() + selectedRole.slice(1)} Information
+                    </h3>
+                    {renderRoleSpecificFields()}
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={isLoading || !selectedRole}
+                  className="btn btn-primary w-full mt-6"
+                >
+                  {isLoading ? (
+                    <>
+                      <div className="loading-spinner mr-2"></div>
+                      Creating Account...
+                    </>
+                  ) : (
+                    <>
+                      <UserPlus size={20} />
+                      Create Account
+                    </>
+                  )}
+                </button>
+
+                <div className="mt-6 text-center">
+                  <p className="text-sm text-gray">
+                    Already have an account?{' '}
+                    <Link 
+                      to="/login" 
+                      className="text-primary hover:underline font-medium"
+                    >
+                      Sign in here
+                    </Link>
+                  </p>
+                </div>
+              </form>
             </div>
-
-            {/* Role-specific Fields */}
-            {selectedRole && (
-              <div className="border-t pt-6 mt-6">
-                <h3 className="text-lg font-medium text-navy mb-4">
-                  {selectedRole.charAt(0).toUpperCase() + selectedRole.slice(1)} Information
-                </h3>
-                {renderRoleSpecificFields()}
-              </div>
-            )}
-
-            {/* Signup Button */}
-            <button
-              type="submit"
-              disabled={isLoading || !selectedRole}
-              className="btn btn-primary w-full mt-6"
-            >
-              {isLoading ? (
-                <>
-                  <div className="loading-spinner mr-2"></div>
-                  Creating Account...
-                </>
-              ) : (
-                <>
-                  <UserPlus size={20} />
-                  Create Account
-                </>
-              )}
-            </button>
-          </form>
-
-          {/* Footer Links */}
-          <div className="mt-6 text-center">
-            <p className="text-sm text-gray">
-              Already have an account?{' '}
-              <Link 
-                to="/login" 
-                className="text-primary hover:underline font-medium"
-              >
-                Sign in here
-              </Link>
-            </p>
           </div>
-
-          {/* Note for College/Government */}
-          {selectedRole && ['college', 'government'].includes(selectedRole) && (
-            <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-              <p className="text-sm text-yellow-800">
-                <strong>Note:</strong> {selectedRole.charAt(0).toUpperCase() + selectedRole.slice(1)} accounts require approval from government administrators before access is granted.
-              </p>
-            </div>
-          )}
-        </div>
-
-        {/* Back to Home */}
-        <div className="text-center mt-6">
-          <Link 
-            to="/" 
-            className="text-sm text-gray hover:text-navy"
-          >
-            ← Back to Home
-          </Link>
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 };

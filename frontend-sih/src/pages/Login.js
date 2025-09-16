@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Shield, Eye, EyeOff, LogIn } from 'lucide-react';
 import { useAuth } from '../utils/AuthContext';
 import toast from 'react-hot-toast';
+import Footer from '../components/Footer';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -85,132 +86,133 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-light flex items-center justify-center py-12 px-4">
-      <div className="w-full max-w-md">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center gap-3 text-navy hover:text-primary">
-            <Shield size={40} />
-            <div className="text-left">
-              <h1 className="text-xl font-bold">New India Credential Kavach</h1>
-              <p className="text-sm text-gray">Government of Jharkhand</p>
-            </div>
-          </Link>
-        </div>
-
-        {/* Login Card */}
-        <div className="card">
-          <div className="card-header text-center">
-            <h2 className="card-title">Welcome Back</h2>
-            <p className="card-subtitle">Sign in to your account</p>
-          </div>
-
-          <form onSubmit={handleSubmit} noValidate>
-            {/* Email Field */}
-            <div className="form-group">
-              <label htmlFor="email" className="form-label">
-                Email Address
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                className={`form-input ${errors.email ? 'border-red-500' : ''}`}
-                placeholder="Enter your email address"
-                required
-              />
-              {errors.email && (
-                <div className="form-error">{errors.email}</div>
-              )}
+    <div className="min-h-screen bg-light flex flex-col justify-between">
+      <div className="auth-hero">
+        <div className="container">
+          <div className="auth-grid">
+            <div className="auth-info">
+              <div className="logo-section mb-6">
+                <Shield size={40} />
+                <div>
+                  <h1 className="logo-text">New India Credential Kavach</h1>
+                  <p className="government-text">Government of Jharkhand</p>
+                </div>
+              </div>
+              <h2 className="auth-title">Welcome Back</h2>
+              <p className="auth-subtitle">Secure access to your credential dashboard</p>
+              <ul className="auth-points">
+                <li>Government-grade security</li>
+                <li>Fast and accurate verification</li>
+                <li>24/7 availability</li>
+              </ul>
             </div>
 
-            {/* Password Field */}
-            <div className="form-group">
-              <label htmlFor="password" className="form-label">
-                Password
-              </label>
-              <div className="relative">
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  id="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  className={`form-input pr-12 ${errors.password ? 'border-red-500' : ''}`}
-                  placeholder="Enter your password"
-                  required
-                />
+            <div className="auth-card card">
+              <div className="card-header text-center">
+                <h2 className="card-title">Sign In</h2>
+                <p className="card-subtitle">Use your registered email and password</p>
+              </div>
+
+              <form onSubmit={handleSubmit} noValidate>
+                {/* Email Field */}
+                <div className="form-group">
+                  <label htmlFor="email" className="form-label">
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    className={`form-input ${errors.email ? 'border-red-500' : ''}`}
+                    placeholder="Enter your email address"
+                    required
+                  />
+                  {errors.email && (
+                    <div className="form-error">{errors.email}</div>
+                  )}
+                </div>
+
+                {/* Password Field */}
+                <div className="form-group">
+                  <label htmlFor="password" className="form-label">
+                    Password
+                  </label>
+                  <div className="relative">
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      id="password"
+                      name="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      className={`form-input pr-12 ${errors.password ? 'border-red-500' : ''}`}
+                      placeholder="Enter your password"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="password-toggle"
+                    >
+                      {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                    </button>
+                  </div>
+                  {errors.password && (
+                    <div className="form-error">{errors.password}</div>
+                  )}
+                </div>
+
+                {/* Login Button */}
                 <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  type="submit"
+                  disabled={isLoading}
+                  className="btn btn-primary w-full"
                 >
-                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  {isLoading ? (
+                    <>
+                      <div className="loading-spinner mr-2"></div>
+                      Signing In...
+                    </>
+                  ) : (
+                    <>
+                      <LogIn size={20} />
+                      Sign In
+                    </>
+                  )}
                 </button>
+              </form>
+
+              {/* Footer Links */}
+              <div className="mt-6 text-center">
+                <p className="text-sm text-gray">
+                  Don't have an account?{' '}
+                  <Link 
+                    to="/signup" 
+                    className="text-primary hover:underline font-medium"
+                  >
+                    Sign up here
+                  </Link>
+                </p>
               </div>
-              {errors.password && (
-                <div className="form-error">{errors.password}</div>
-              )}
-            </div>
 
-            {/* Login Button */}
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="btn btn-primary w-full"
-            >
-              {isLoading ? (
-                <>
-                  <div className="loading-spinner mr-2"></div>
-                  Signing In...
-                </>
-              ) : (
-                <>
-                  <LogIn size={20} />
-                  Sign In
-                </>
-              )}
-            </button>
-          </form>
-
-          {/* Footer Links */}
-          <div className="mt-6 text-center">
-            <p className="text-sm text-gray">
-              Don't have an account?{' '}
-              <Link 
-                to="/signup" 
-                className="text-primary hover:underline font-medium"
-              >
-                Sign up here
-              </Link>
-            </p>
-          </div>
-
-          {/* Demo Credentials */}
-          <div className="mt-6 p-4 bg-light rounded-lg">
-            <h4 className="font-medium text-sm text-navy mb-2">Demo Credentials:</h4>
-            <div className="text-xs text-gray space-y-1">
-              <div>
-                <strong>Government Admin:</strong><br />
-                Email: admin@credentialkavach.gov.in<br />
-                Password: Admin@123
+              {/* Demo Credentials */}
+              <div className="mt-6 p-4 bg-light rounded-lg">
+                <h4 className="font-medium text-sm text-navy mb-2">Demo Credentials:</h4>
+                <div className="text-xs text-gray space-y-1">
+                  <div>
+                    <strong>Government Admin:</strong><br />
+                    Email: admin@credentialkavach.gov.in<br />
+                    Password: Admin@123
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-
-        {/* Back to Home */}
-        <div className="text-center mt-6">
-          <Link 
-            to="/" 
-            className="text-sm text-gray hover:text-navy"
-          >
-            ← Back to Home
-          </Link>
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 };
