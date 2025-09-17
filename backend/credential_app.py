@@ -125,3 +125,7 @@ def create_app():
             print("Admin account created during app initialization")
     
     return app
+
+if __name__ == '__main__':
+    app = create_app()
+    app.run(debug=True, host='0.0.0.0', port=5001)

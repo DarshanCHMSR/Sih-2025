@@ -1,7 +1,10 @@
-from credential_app import db
 from datetime import datetime
 from enum import Enum
 import uuid
+
+# Import db from credential_app
+# This import will work because credential_app defines db before importing models
+from credential_app import db
 
 class Role(db.Model):
     """User roles in the system"""

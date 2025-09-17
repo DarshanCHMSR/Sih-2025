@@ -36,9 +36,9 @@ const ProtectedRoute = ({ children, requiredRole }) => {
     return <Navigate to={userDashboard || '/'} replace />;
   }
 
-  // Check if user account is approved (for college and government roles)
+  // Check if user account is approved (for college, government, and employer roles)
   // Skip approval check for the designated admin account
-  if (user && ['college', 'government'].includes(user.role)) {
+  if (user && ['college', 'government', 'employer'].includes(user.role)) {
     const isAdminAccount = user.email === 'admin@credentialkavach.gov.in';
     const isApproved = user.is_approved || isAdminAccount; // Admin is always approved
     

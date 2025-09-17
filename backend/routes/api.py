@@ -421,7 +421,7 @@ def get_stats():
 
 @api_bp.route('/verify-document', methods=['POST'])
 @jwt_required()
-def verify_document():
+def employer_verify_document():
     """Verify document authenticity for employers"""
     try:
         current_user_id = get_jwt_identity()
