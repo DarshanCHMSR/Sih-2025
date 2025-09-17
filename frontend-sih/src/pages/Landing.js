@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Shield, FileCheck, Users, Database, Zap, Award } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import DocumentUpload from '../components/DocumentUpload';
 
 const Landing = () => {
   return (
@@ -95,6 +96,23 @@ const Landing = () => {
                 verification activities and system access.
               </p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Document Upload Section */}
+      <section className="py-16 bg-gradient-to-r from-primary to-secondary text-white">
+        <div className="container">
+          <div className="text-center mb-12">
+            <h3 className="text-3xl font-bold mb-4">Quick Document Verification</h3>
+            <p className="text-lg opacity-90 max-w-2xl mx-auto">
+              Upload your academic document below for instant verification. 
+              Our OCR system will extract and validate the information.
+            </p>
+          </div>
+
+          <div className="max-w-2xl mx-auto bg-white rounded-lg p-8 text-gray-800">
+            <DocumentUpload />
           </div>
         </div>
       </section>

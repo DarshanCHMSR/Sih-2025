@@ -74,6 +74,9 @@ const Login = () => {
         case 'government':
           navigate('/government-dashboard');
           break;
+        case 'employer':
+          navigate('/employer-dashboard');
+          break;
         default:
           navigate('/');
       }

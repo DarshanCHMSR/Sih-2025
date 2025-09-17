@@ -534,3 +534,128 @@ def employer_verify_document():
         
     except Exception as e:
         return jsonify({'message': 'Verification failed', 'error': str(e)}), 500
+
+@api_bp.route('/employer/profile', methods=['PUT'])
+@jwt_required()
+def update_employer_profile():
+    """Update employer profile information"""
+    try:
+        current_user_id = get_jwt_identity()
+        user = User.query.get(current_user_id)
+        
+        if not user or user.role != 'employer':
+            return jsonify({'message': 'Access denied. Employer role required.'}), 403
+        
+        data = request.get_json()
+        
+        # Update allowed fields
+        allowed_fields = ['full_name', 'phone', 'company_name', 'company_registration', 'industry', 'hr_contact']
+        
+        for field in allowed_fields:
+            if field in data:
+                setattr(user, field, data[field])
+        
+        # Update timestamp
+        user.updated_at = datetime.utcnow()
+        
+        db.session.commit()
+        
+        # Log the action
+        log_user_action(
+            user_id=current_user_id,
+            action='profile_update',
+            details='Updated employer profile information',
+            resource_type='user',
+            resource_id=user.id
+        )
+        
+        # Return updated user data
+        user_data = {
+            'id': user.id,
+            'email': user.email,
+            'full_name': user.full_name,
+            'phone': user.phone,
+            'company_name': user.company_name,
+            'company_registration': user.company_registration,
+            'industry': user.industry,
+            'hr_contact': user.hr_contact,
+            'is_verified': user.is_verified,
+            'is_approved': user.is_approved,
+            'is_active': user.is_active,
+            'updated_at': user.updated_at.isoformat()
+        }
+        
+        return jsonify({
+            'message': 'Profile updated successfully',
+            'user': user_data
+        }), 200
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'message': 'Failed to update profile', 'error': str(e)}), 500
+
+@api_bp.route('/employer/verify-document', methods=['POST'])
+@jwt_required()
+def employer_submit_verification():
+    """Submit employer verification result for a document"""
+    try:
+        current_user_id = get_jwt_identity()
+        user = User.query.get(current_user_id)
+        
+        if not user or user.role != 'employer':
+            return jsonify({'message': 'Access denied. Employer role required.'}), 403
+        
+        data = request.get_json()
+        document_id = data.get('document_id')
+        verification_status = data.get('verification_status')  # 'verified', 'rejected', 'suspicious'
+        notes = data.get('notes', '')
+        confidence_score = data.get('confidence_score', 0)
+        
+        if not document_id or not verification_status:
+            return jsonify({'message': 'Document ID and verification status are required'}), 400
+        
+        # Find the document
+        document = Document.query.get(document_id)
+        if not document:
+            return jsonify({'message': 'Document not found'}), 404
+        
+        # Update document verification status
+        document.status = verification_status
+        document.verification_notes = f"Employer Verification by {user.company_name}: {notes}"
+        document.verification_date = datetime.utcnow()
+        document.verified_by = user.id
+        
+        # Add employer-specific verification data to ocr_data
+        if not document.ocr_data:
+            document.ocr_data = {}
+        
+        document.ocr_data['employer_verification'] = {
+            'employer_company': user.company_name,
+            'verifier_name': user.full_name,
+            'verification_date': datetime.utcnow().isoformat(),
+            'confidence_score': confidence_score,
+            'status': verification_status,
+            'notes': notes
+        }
+        
+        db.session.commit()
+        
+        # Log the verification action
+        log_user_action(
+            user_id=current_user_id,
+            action='document_verification',
+            details=f'Verified document {document_id} with status: {verification_status}',
+            resource_type='document',
+            resource_id=document_id
+        )
+        
+        return jsonify({
+            'message': 'Verification submitted successfully',
+            'document_id': document_id,
+            'verification_status': verification_status,
+            'confidence_score': confidence_score
+        }), 200
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'message': 'Failed to submit verification', 'error': str(e)}), 500

@@ -1,193 +1,220 @@
 import React, { useState } from 'react';
-import { toast } from 'react-hot-toast';
+import { useAuth } from '../context/AuthContext';
+import { User, FileCheck, Search, BarChart3, Settings, Building } from 'lucide-react';
+import EmployerProfile from './EmployerProfile';
+import DocumentVerification from './DocumentVerification';
 import './EmployerDashboard.css';
 
 function EmployerDashboard() {
-  const [verificationData, setVerificationData] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [studentEmail, setStudentEmail] = useState('');
-  const [documentType, setDocumentType] = useState('marks_card');
+  const { user } = useAuth();
+  const [activeTab, setActiveTab] = useState('overview');
 
-  const handleVerification = async (e) => {
-    e.preventDefault();
-    
-    if (!studentEmail.trim()) {
-      toast.error('Please enter student email');
-      return;
+  const tabs = [
+    { id: 'overview', label: 'Overview', icon: BarChart3 },
+    { id: 'verification', label: 'Document Verification', icon: FileCheck },
+    { id: 'profile', label: 'Company Profile', icon: Building },
+  ];
+
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case 'overview':
+        return <OverviewTab user={user} setActiveTab={setActiveTab} />;
+      case 'verification':
+        return <DocumentVerification />;
+      case 'profile':
+        return <EmployerProfile />;
+      default:
+        return <OverviewTab user={user} />;
     }
-
-    setLoading(true);
-    setVerificationData(null);
-
-    try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('/api/verify-document', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          student_email: studentEmail,
-          document_type: documentType
-        })
-      });
-
-      const data = await response.json();
-      
-      if (response.ok) {
-        setVerificationData(data);
-        
-        if (data.verified) {
-          toast.success('Document verified successfully!');
-        } else if (data.status === 'FRAUD_DETECTED') {
-          toast.error('Fraud detected in document!');
-        } else {
-          toast.warning('Document verification inconclusive');
-        }
-      } else {
-        toast.error(data.message || 'Verification failed');
-      }
-    } catch (error) {
-      console.error('Verification error:', error);
-      toast.error('Failed to verify document');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'VERIFIED': return '#22c55e';
-      case 'FRAUD_DETECTED': return '#ef4444';
-      case 'PENDING_VERIFICATION': return '#f59e0b';
-      case 'STUDENT_NOT_FOUND': return '#6b7280';
-      case 'NO_DOCUMENTS': return '#6b7280';
-      default: return '#6b7280';
-    }
-  };
-
-  const getConfidenceColor = (score) => {
-    if (score >= 90) return '#22c55e';
-    if (score >= 70) return '#f59e0b';
-    return '#ef4444';
   };
 
   return (
-    <div className="employer-dashboard">
-      <div className="dashboard-header">
-        <h1>Document Verification Portal</h1>
-        <p>Verify student credentials and detect fraudulent documents</p>
-      </div>
-
-      <div className="verification-form-container">
-        <form onSubmit={handleVerification} className="verification-form">
-          <h2>Verify Student Document</h2>
-          
-          <div className="form-group">
-            <label htmlFor="studentEmail">Student Email Address</label>
-            <input
-              type="email"
-              id="studentEmail"
-              value={studentEmail}
-              onChange={(e) => setStudentEmail(e.target.value)}
-              placeholder="Enter student's registered email"
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="documentType">Document Type</label>
-            <select
-              id="documentType"
-              value={documentType}
-              onChange={(e) => setDocumentType(e.target.value)}
-            >
-              <option value="marks_card">Marks Card</option>
-              <option value="degree_certificate">Degree Certificate</option>
-              <option value="transcript">Transcript</option>
-              <option value="character_certificate">Character Certificate</option>
-            </select>
-          </div>
-
-          <button type="submit" disabled={loading} className="verify-btn">
-            {loading ? 'Verifying...' : 'Verify Document'}
-          </button>
-        </form>
-      </div>
-
-      {verificationData && (
-        <div className="verification-result">
-          <div className="result-header">
-            <h3>Verification Result</h3>
-            <div 
-              className="status-badge"
-              style={{ backgroundColor: getStatusColor(verificationData.status) }}
-            >
-              {verificationData.status.replace('_', ' ')}
+    <div className="min-h-screen bg-light">
+      {/* Header */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="container py-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-navy">Employer Dashboard</h1>
+              <p className="text-gray-600 mt-1">
+                Welcome back, {user?.full_name} • {user?.company_name}
+              </p>
             </div>
-          </div>
-
-          {verificationData.confidence_score && (
-            <div className="confidence-score">
-              <span>Confidence Score: </span>
-              <span 
-                style={{ color: getConfidenceColor(verificationData.confidence_score) }}
-                className="score-value"
-              >
-                {verificationData.confidence_score}%
-              </span>
-            </div>
-          )}
-
-          {verificationData.student_info && (
-            <div className="student-info">
-              <h4>Student Information</h4>
-              <div className="info-grid">
-                <div><strong>Name:</strong> {verificationData.student_info.name}</div>
-                <div><strong>Email:</strong> {verificationData.student_info.email}</div>
-                <div><strong>College:</strong> {verificationData.student_info.college}</div>
-                <div><strong>Course:</strong> {verificationData.student_info.course}</div>
-                {verificationData.student_info.roll_number && (
-                  <div><strong>Roll Number:</strong> {verificationData.student_info.roll_number}</div>
-                )}
+            <div className="flex items-center gap-4">
+              <div className="text-right">
+                <div className={`status-badge ${user?.is_approved ? 'status-success' : 'status-pending'}`}>
+                  {user?.is_approved ? 'Approved' : 'Pending Approval'}
+                </div>
               </div>
             </div>
-          )}
-
-          {verificationData.document_info && (
-            <div className="document-info">
-              <h4>Document Information</h4>
-              <div className="info-grid">
-                <div><strong>Title:</strong> {verificationData.document_info.title}</div>
-                <div><strong>Upload Date:</strong> {new Date(verificationData.document_info.upload_date).toLocaleDateString()}</div>
-                <div><strong>Status:</strong> {verificationData.document_info.status}</div>
-                <div><strong>File Size:</strong> {verificationData.document_info.file_size ? `${(verificationData.document_info.file_size / 1024).toFixed(2)} KB` : 'Unknown'}</div>
-              </div>
-            </div>
-          )}
-
-          {verificationData.fraud_indicators && verificationData.fraud_indicators.length > 0 && (
-            <div className="fraud-indicators">
-              <h4>⚠️ Fraud Indicators Detected</h4>
-              <ul>
-                {verificationData.fraud_indicators.map((indicator, index) => (
-                  <li key={index}>{indicator}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          <div className="verification-meta">
-            <small>
-              Verified on: {new Date(verificationData.verification_timestamp).toLocaleString()}
-              {verificationData.verified_by && ` by ${verificationData.verified_by}`}
-            </small>
           </div>
         </div>
-      )}
+      </div>
+
+      {/* Tab Navigation */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="container">
+          <nav className="flex space-x-8">
+            {tabs.map((tab) => {
+              const Icon = tab.icon;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex items-center gap-2 px-4 py-4 border-b-2 font-medium text-sm transition-colors ${
+                    activeTab === tab.id
+                      ? 'border-primary text-primary'
+                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  }`}
+                >
+                  <Icon size={18} />
+                  {tab.label}
+                </button>
+              );
+            })}
+          </nav>
+        </div>
+      </div>
+
+      {/* Tab Content */}
+      <div className="container py-6">
+        {renderTabContent()}
+      </div>
     </div>
   );
 }
+
+// Overview Tab Component
+const OverviewTab = ({ user, setActiveTab }) => {
+  return (
+    <div className="space-y-6">
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="card">
+          <div className="card-body">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-600 text-sm">Documents Verified</p>
+                <p className="text-2xl font-bold text-primary">12</p>
+              </div>
+              <FileCheck className="text-primary" size={32} />
+            </div>
+          </div>
+        </div>
+        
+        <div className="card">
+          <div className="card-body">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-600 text-sm">Fraud Detected</p>
+                <p className="text-2xl font-bold text-red-500">2</p>
+              </div>
+              <Search className="text-red-500" size={32} />
+            </div>
+          </div>
+        </div>
+        
+        <div className="card">
+          <div className="card-body">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-600 text-sm">Success Rate</p>
+                <p className="text-2xl font-bold text-green-500">95%</p>
+              </div>
+              <BarChart3 className="text-green-500" size={32} />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Actions */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="card">
+          <div className="card-header">
+            <h3 className="card-title">Quick Verification</h3>
+            <p className="card-subtitle">Verify a student document instantly</p>
+          </div>
+          <div className="card-body">
+            <p className="text-gray-600 mb-4">
+              Enter a student's email address to quickly verify their academic documents for recruitment purposes.
+            </p>
+            <button className="btn btn-primary w-full" onClick={() => setActiveTab('verification')}>
+              Start Verification
+            </button>
+          </div>
+        </div>
+
+        <div className="card">
+          <div className="card-header">
+            <h3 className="card-title">Company Information</h3>
+            <p className="card-subtitle">Manage your organization details</p>
+          </div>
+          <div className="card-body">
+            <div className="space-y-2 mb-4">
+              <div className="flex justify-between text-sm">
+                <span className="text-gray-600">Company:</span>
+                <span className="font-medium">{user?.company_name}</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-gray-600">Industry:</span>
+                <span className="font-medium">{user?.industry}</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-gray-600">Registration:</span>
+                <span className="font-medium">{user?.company_registration}</span>
+              </div>
+            </div>
+            <button className="btn btn-outline w-full" onClick={() => setActiveTab('profile')}>
+              Update Profile
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Recent Activity */}
+      <div className="card">
+        <div className="card-header">
+          <h3 className="card-title">Recent Activity</h3>
+        </div>
+        <div className="card-body">
+          <div className="space-y-4">
+            <div className="flex items-center justify-between p-3 bg-light rounded">
+              <div className="flex items-center gap-3">
+                <FileCheck className="text-green-500" size={20} />
+                <div>
+                  <p className="font-medium">Document Verified</p>
+                  <p className="text-sm text-gray-600">student@example.com • Marks Card</p>
+                </div>
+              </div>
+              <span className="text-sm text-gray-500">2 hours ago</span>
+            </div>
+            
+            <div className="flex items-center justify-between p-3 bg-light rounded">
+              <div className="flex items-center gap-3">
+                <Search className="text-blue-500" size={20} />
+                <div>
+                  <p className="font-medium">Verification Search</p>
+                  <p className="text-sm text-gray-600">candidate@college.edu • Degree Certificate</p>
+                </div>
+              </div>
+              <span className="text-sm text-gray-500">1 day ago</span>
+            </div>
+            
+            <div className="flex items-center justify-between p-3 bg-light rounded">
+              <div className="flex items-center gap-3">
+                <User className="text-primary" size={20} />
+                <div>
+                  <p className="font-medium">Profile Updated</p>
+                  <p className="text-sm text-gray-600">Company information updated</p>
+                </div>
+              </div>
+              <span className="text-sm text-gray-500">3 days ago</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default EmployerDashboard;

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employer Test Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .login-form {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="email"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .credentials {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .credentials h3 {
+            margin-top: 0;
+            color: #495057;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-form">
+        <h2>Employer Login Test</h2>
+
+        <div class="credentials">
+            <h3>Test Credentials</h3>
+            <p><strong>Email:</strong> employer@test.com</p>
+            <p><strong>Password:</strong> password123</p>
+            <p><strong>Company:</strong> Tech Solutions Inc.</p>
+        </div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" value="employer@test.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" value="password123" required>
+            </div>
+
+            <button type="submit">Login</button>
+        </form>
+
+        <div id="result" style="margin-top: 20px; padding: 10px; border-radius: 4px; display: none;"></div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const resultDiv = document.getElementById('result');
+
+            try {
+                const response = await fetch('http://localhost:5001/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                resultDiv.style.display = 'block';
+
+                if (response.ok) {
+                    resultDiv.style.backgroundColor = '#d4edda';
+                    resultDiv.style.color = '#155724';
+                    resultDiv.innerHTML = `
+                        <strong>✅ Login Successful!</strong><br>
+                        Token: ${data.access_token ? 'Received' : 'Not received'}<br>
+                        Role: ${data.role || 'Not specified'}<br>
+                        User: ${data.full_name || 'Not specified'}
+                    `;
+
+                    // Store token for future API calls
+                    localStorage.setItem('token', data.access_token);
+                } else {
+                    resultDiv.style.backgroundColor = '#f8d7da';
+                    resultDiv.style.color = '#721c24';
+                    resultDiv.innerHTML = `<strong>❌ Login Failed:</strong> ${data.message || 'Unknown error'}`;
+                }
+            } catch (error) {
+                resultDiv.style.display = 'block';
+                resultDiv.style.backgroundColor = '#f8d7da';
+                resultDiv.style.color = '#721c24';
+                resultDiv.innerHTML = `<strong>❌ Error:</strong> ${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html>

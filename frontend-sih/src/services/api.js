@@ -222,6 +222,34 @@ export const apiService = {
     }
   },
 
+  // Employer specific
+  async updateEmployerProfile(profileData) {
+    try {
+      const response = await api.put('/api/employer/profile', profileData);
+      return response.data;
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  },
+
+  async verifyStudentDocument(verificationData) {
+    try {
+      const response = await api.post('/api/verify-document', verificationData);
+      return response.data;
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  },
+
+  async submitVerification(verificationData) {
+    try {
+      const response = await api.post('/api/employer/verify-document', verificationData);
+      return response.data;
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  },
+
   // Health check
   async healthCheck() {
     try {

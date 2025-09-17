@@ -211,7 +211,7 @@ def login():
             return jsonify({'message': 'Unauthorized government access'}), 403
         
         # Skip approval check for the designated admin account
-        if user.role in ['college', 'government'] and not user.is_approved and user.email != 'admin@credentialkavach.gov.in':
+        if user.role in ['college', 'government', 'employer'] and not user.is_approved and user.email != 'admin@credentialkavach.gov.in':
             print(f"User {user.email} is pending approval")
             return jsonify({'message': 'Account pending approval from administrator'}), 401
         
@@ -259,6 +259,13 @@ def login():
                 'department_name': user.department_name,
                 'designation': user.designation,
                 'employee_id': user.employee_id
+            })
+        elif user.role == 'employer':
+            user_data.update({
+                'company_name': user.company_name,
+                'company_registration': user.company_registration,
+                'industry': user.industry,
+                'hr_contact': user.hr_contact
             })
         
         return jsonify({
