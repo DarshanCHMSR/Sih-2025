@@ -5,11 +5,37 @@ Simple Flask app starter without external dependencies for testing
 
 import os
 import sys
-from flask import Flask, request, jsonify
-from flask_cors import CORS
+
+# Try to import Flask, if not available, provide instructions
+try:
+    from flask import Flask, request, jsonify
+    FLASK_AVAILABLE = True
+except ImportError:
+    print("❌ Flask not installed!")
+    print("📋 Please run: pip install flask flask-cors")
+    sys.exit(1)
+
+# Try to import CORS, if not available, continue without it
+try:
+    from flask_cors import CORS
+    CORS_AVAILABLE = True
+except ImportError:
+    print("⚠️ flask-cors not installed - CORS may not work")
+    CORS_AVAILABLE = False
 
 app = Flask(__name__)
-CORS(app, origins=['http://localhost:3000'])
+
+# Configure CORS if available
+if CORS_AVAILABLE:
+    CORS(app, origins=['http://localhost:3000'])
+else:
+    # Manual CORS headers
+    @app.after_request
+    def after_request(response):
+        response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+        response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+        return response
 
 @app.route('/')
 def home():
