@@ -11,6 +11,7 @@ import Signup from './pages/Signup';
 import StudentDashboard from './pages/StudentDashboard';
 import CollegeDashboard from './pages/CollegeDashboard';
 import GovernmentDashboard from './pages/GovernmentDashboard';
+import DocumentBlocks from './pages/DocumentBlocks';
 
 // Import Global Styles
 import './App.css';
@@ -26,6 +27,8 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             
+            {/* Document Blocks Visualisation */}
+            <Route path="/documents" element={<DocumentBlocks />} />
             {/* Protected Routes */}
             <Route 
               path="/student-dashboard" 
