@@ -11,6 +11,7 @@ import Signup from './pages/Signup';
 import StudentDashboard from './pages/StudentDashboard';
 import CollegeDashboard from './pages/CollegeDashboard';
 import GovernmentDashboard from './pages/GovernmentDashboard';
+import EmployerDashboard from './pages/EmployerDashboard';
 import DocumentBlocks from './pages/DocumentBlocks';
 
 // Import Global Styles
@@ -51,6 +52,14 @@ function App() {
               element={
                 <ProtectedRoute requiredRole="government">
                   <GovernmentDashboard />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/employer-dashboard" 
+              element={
+                <ProtectedRoute requiredRole="employer">
+                  <EmployerDashboard />
                 </ProtectedRoute>
               } 
             />

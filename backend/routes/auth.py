@@ -76,12 +76,8 @@ def signup():
             return jsonify({'message': 'Email already registered'}), 400
         
         # Validate role
-        if data['role'] not in ['student', 'college', 'government']:
+        if data['role'] not in ['student', 'college', 'employer']:
             return jsonify({'message': 'Invalid role'}), 400
-        
-        # Prevent government registrations (admin account is created automatically)
-        if data['role'] == 'government':
-            return jsonify({'message': 'Government registrations are not allowed. Use the designated admin account.'}), 403
         
         # Create user based on role
         user_data = {
@@ -93,7 +89,7 @@ def signup():
             'role': data['role'],
             'verification_token': str(uuid.uuid4()),
             'is_verified': True,  # Skip email verification for demo
-            'is_approved': True if data['role'] == 'student' else False  # Auto-approve students
+            'is_approved': True if data['role'] in ['student', 'employer'] else False  # Auto-approve students and employers
         }
         
         # Role-specific fields
@@ -115,12 +111,13 @@ def signup():
                 'designation': data.get('designation', '')
             })
             
-        elif data['role'] == 'government':
+        elif data['role'] == 'employer':
             user_data.update({
-                'department_name': data.get('department', ''),
-                'designation': data.get('designation', ''),
-                'employee_id': data.get('employee_id', ''),
-                'address': data.get('office_address', '')
+                'company_name': data.get('company_name', ''),
+                'company_registration': data.get('company_registration', ''),
+                'industry': data.get('industry', ''),
+                'hr_contact': data.get('hr_contact', ''),
+                'address': data.get('address', '')
             })
         
         # Create user

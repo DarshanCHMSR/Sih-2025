@@ -102,6 +102,8 @@ export const AuthProvider = ({ children }) => {
         return '/college-dashboard';
       case 'government':
         return '/government-dashboard';
+      case 'employer':
+        return '/employer-dashboard';
       default:
         return '/';
     }

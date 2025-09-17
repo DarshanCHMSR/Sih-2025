@@ -28,7 +28,8 @@ const ProtectedRoute = ({ children, requiredRole }) => {
     const dashboardMap = {
       'student': '/student-dashboard',
       'college': '/college-dashboard',
-      'government': '/government-dashboard'
+      'government': '/government-dashboard',
+      'employer': '/employer-dashboard'
     };
     
     const userDashboard = dashboardMap[user?.role];

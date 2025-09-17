@@ -49,6 +49,12 @@ class User(db.Model):
     designation = db.Column(db.String(100))
     employee_id = db.Column(db.String(50))
     
+    # Employer specific fields
+    company_name = db.Column(db.String(200))
+    company_registration = db.Column(db.String(100))
+    industry = db.Column(db.String(100))
+    hr_contact = db.Column(db.String(200))
+    
     # Relationships
     uploaded_documents = db.relationship('Document', backref='uploader', lazy=True, foreign_keys='Document.uploaded_by')
     verified_documents = db.relationship('Document', backref='verifier', lazy=True, foreign_keys='Document.verified_by')

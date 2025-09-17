@@ -65,7 +65,7 @@ def create_app():
         admin_role = Role.query.filter_by(name='government').first()
         if not admin_role:
             # Create default roles
-            roles = ['student', 'college', 'government']
+            roles = ['student', 'college', 'government', 'employer']
             for role_name in roles:
                 role = Role(name=role_name)
                 db.session.add(role)

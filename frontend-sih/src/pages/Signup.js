@@ -51,12 +51,13 @@ const Signup = () => {
         fields.designation = '';
         fields.affiliation = '';
         break;
-      case 'government':
+      case 'employer':
         fields.name = '';
-        fields.department = '';
-        fields.designation = '';
-        fields.employee_id = '';
-        fields.office_address = '';
+        fields.company_name = '';
+        fields.company_registration = '';
+        fields.industry = '';
+        fields.hr_contact = '';
+        fields.address = '';
         break;
       default:
         break;
@@ -95,10 +96,7 @@ const Signup = () => {
       newErrors.role = 'Please select a role';
     }
     
-    // Prevent government registration
-    if (formData.role === 'government') {
-      newErrors.role = 'Government registrations are not allowed. Use the designated admin account.';
-    }
+
     
     if (!formData.email) {
       newErrors.email = 'Email is required';
@@ -122,7 +120,7 @@ const Signup = () => {
     const requiredRoleFields = {
       student: ['name', 'enrollment_number', 'institution', 'program'],
       college: ['college_name', 'registration_number', 'contact_person', 'designation'],
-      government: ['name', 'department', 'designation', 'employee_id']
+      employer: ['name', 'company_name', 'company_registration', 'industry', 'hr_contact']
     };
 
     const required = requiredRoleFields[formData.role] || [];
@@ -334,7 +332,7 @@ const Signup = () => {
           </>
         );
 
-      case 'government':
+      case 'employer':
         return (
           <>
             <div className="form-group">
@@ -351,55 +349,70 @@ const Signup = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Department *</label>
-              <select
-                name="department"
-                value={roleFields.department || ''}
+              <label className="form-label">Company Name *</label>
+              <input
+                type="text"
+                name="company_name"
+                value={roleFields.company_name || ''}
                 onChange={handleChange}
-                className={`form-select ${errors.department ? 'border-red-500' : ''}`}
-              >
-                <option value="">Select Department</option>
-                <option value="Education">Department of Education</option>
-                <option value="Higher Education">Department of Higher Education</option>
-                <option value="Skill Development">Department of Skill Development</option>
-                <option value="IT">Department of IT</option>
-                <option value="Other">Other</option>
-              </select>
-              {errors.department && <div className="form-error">{errors.department}</div>}
+                className={`form-input ${errors.company_name ? 'border-red-500' : ''}`}
+                placeholder="Enter company name"
+              />
+              {errors.company_name && <div className="form-error">{errors.company_name}</div>}
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="form-group">
-                <label className="form-label">Designation *</label>
+                <label className="form-label">Company Registration *</label>
                 <input
                   type="text"
-                  name="designation"
-                  value={roleFields.designation || ''}
+                  name="company_registration"
+                  value={roleFields.company_registration || ''}
                   onChange={handleChange}
-                  className={`form-input ${errors.designation ? 'border-red-500' : ''}`}
-                  placeholder="e.g., Additional Secretary"
+                  className={`form-input ${errors.company_registration ? 'border-red-500' : ''}`}
+                  placeholder="e.g., CIN, Registration No."
                 />
-                {errors.designation && <div className="form-error">{errors.designation}</div>}
+                {errors.company_registration && <div className="form-error">{errors.company_registration}</div>}
               </div>
 
               <div className="form-group">
-                <label className="form-label">Employee ID *</label>
-                <input
-                  type="text"
-                  name="employee_id"
-                  value={roleFields.employee_id || ''}
+                <label className="form-label">Industry *</label>
+                <select
+                  name="industry"
+                  value={roleFields.industry || ''}
                   onChange={handleChange}
-                  className={`form-input ${errors.employee_id ? 'border-red-500' : ''}`}
-                  placeholder="Government employee ID"
-                />
-                {errors.employee_id && <div className="form-error">{errors.employee_id}</div>}
+                  className={`form-select ${errors.industry ? 'border-red-500' : ''}`}
+                >
+                  <option value="">Select Industry</option>
+                  <option value="IT">Information Technology</option>
+                  <option value="Banking">Banking & Finance</option>
+                  <option value="Healthcare">Healthcare</option>
+                  <option value="Manufacturing">Manufacturing</option>
+                  <option value="Education">Education</option>
+                  <option value="Retail">Retail</option>
+                  <option value="Other">Other</option>
+                </select>
+                {errors.industry && <div className="form-error">{errors.industry}</div>}
               </div>
             </div>
 
             <div className="form-group">
-              <label className="form-label">Office Address</label>
+              <label className="form-label">HR Contact Person *</label>
+              <input
+                type="text"
+                name="hr_contact"
+                value={roleFields.hr_contact || ''}
+                onChange={handleChange}
+                className={`form-input ${errors.hr_contact ? 'border-red-500' : ''}`}
+                placeholder="HR Manager name"
+              />
+              {errors.hr_contact && <div className="form-error">{errors.hr_contact}</div>}
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Company Address</label>
               <textarea
-                name="office_address"
+                name="address"
                 value={roleFields.office_address || ''}
                 onChange={handleChange}
                 className="form-input"
@@ -451,15 +464,13 @@ const Signup = () => {
                     {[
                       { value: 'student', label: 'Student', desc: 'Verify your academic documents' },
                       { value: 'college', label: 'College', desc: 'Manage institutional records' },
-                      { value: 'government', label: 'Government', desc: 'Use designated admin account', disabled: true }
+                      { value: 'employer', label: 'Employer', desc: 'Verify student credentials' }
                     ].map((role) => (
                       <div
                         key={role.value}
-                        onClick={() => !role.disabled && handleRoleChange(role.value)}
-                        className={`p-4 border-2 rounded-lg text-center transition-all ${
-                          role.disabled 
-                            ? 'border-gray-200 bg-gray-100 cursor-not-allowed opacity-60'
-                            : selectedRole === role.value
+                        onClick={() => handleRoleChange(role.value)}
+                        className={`p-4 border-2 rounded-lg text-center transition-all cursor-pointer ${
+                          selectedRole === role.value
                             ? 'border-primary bg-orange-50 text-primary cursor-pointer'
                             : 'border-gray-200 hover:border-gray-300 cursor-pointer'
                         }`}
@@ -470,20 +481,6 @@ const Signup = () => {
                     ))}
                   </div>
                   {errors.role && <div className="form-error">{errors.role}</div>}
-                  
-                  {/* Government Access Notice */}
-                  <div className="gov-notice" style={{
-                    backgroundColor: '#e3f2fd',
-                    border: '1px solid #bbdefb',
-                    borderRadius: '8px',
-                    padding: '12px',
-                    marginTop: '8px',
-                    fontSize: '0.85rem',
-                    color: '#1565c0'
-                  }}>
-                    <strong>Note:</strong> Government dashboard access is restricted to the designated system administrator account. 
-                    Use the login form with the provided admin credentials.
-                  </div>
                 </div>
 
                 {/* Email Field */}

@@ -5,7 +5,7 @@ from models import User, Document, db, AuditLog
 from final_ocr_system import MarksCardOCRSystem
 import os
 import uuid
-from datetime import datetime
+from datetime import datetime, timedelta
 
 api_bp = Blueprint('api', __name__)
 
@@ -62,8 +62,8 @@ def get_documents():
         # Get documents based on user role
         if user.role == 'student':
             documents = Document.query.filter_by(uploaded_by=current_user_id).all()
-        elif user.role in ['college', 'government']:
-            # Colleges and government can see all documents
+        elif user.role in ['college', 'government', 'employer']:
+            # Colleges, government and employers can see all documents
             documents = Document.query.all()
         else:
             documents = []
@@ -82,7 +82,7 @@ def get_documents():
             }
             
             # Add uploader info if viewing others' documents
-            if user.role in ['college', 'government']:
+            if user.role in ['college', 'government', 'employer']:
                 uploader = User.query.get(doc.uploaded_by)
                 doc_data['uploader'] = {
                     'name': uploader.full_name,
@@ -407,7 +407,7 @@ def get_stats():
             pending_approvals = User.query.filter_by(is_approved=False, role='college').count()
             
             stats = {
-                'total_users': total_users,
+                'total_usCreaers': total_users,
                 'total_documents': total_docs,
                 'pending_approvals': pending_approvals,
                 'verified_documents': Document.query.filter_by(status='verified').count(),
@@ -418,3 +418,119 @@ def get_stats():
         
     except Exception as e:
         return jsonify({'message': 'Failed to get stats', 'error': str(e)}), 500
+
+@api_bp.route('/verify-document', methods=['POST'])
+@jwt_required()
+def verify_document():
+    """Verify document authenticity for employers"""
+    try:
+        current_user_id = get_jwt_identity()
+        user = User.query.get(current_user_id)
+        
+        if not user or user.role != 'employer':
+            return jsonify({'message': 'Access denied. Employer role required.'}), 403
+        
+        data = request.get_json()
+        student_email = data.get('student_email')
+        document_type = data.get('document_type', 'marks_card')
+        
+        if not student_email:
+            return jsonify({'message': 'Student email is required'}), 400
+        
+        # Find student by email
+        student = User.query.filter_by(email=student_email, role='student').first()
+        if not student:
+            return jsonify({
+                'verified': False,
+                'status': 'STUDENT_NOT_FOUND',
+                'message': 'No student found with this email address'
+            }), 200
+        
+        # Find student's documents
+        documents = Document.query.filter_by(
+            uploaded_by=student.id,
+            document_type=document_type
+        ).order_by(Document.created_at.desc()).all()
+        
+        if not documents:
+            return jsonify({
+                'verified': False,
+                'status': 'NO_DOCUMENTS',
+                'message': 'No documents found for this student',
+                'student_info': {
+                    'name': student.full_name,
+                    'email': student.email,
+                    'college': student.college_name,
+                    'course': student.course
+                }
+            }), 200
+        
+        # Check latest document for fraud indicators
+        latest_doc = documents[0]
+        
+        # Fraud detection logic
+        fraud_indicators = []
+        is_fraud = False
+        
+        # Check for multiple uploads of same document type in short time
+        recent_docs = Document.query.filter_by(
+            uploaded_by=student.id,
+            document_type=document_type
+        ).filter(
+            Document.created_at >= datetime.utcnow() - timedelta(days=7)
+        ).count()
+        
+        if recent_docs > 3:
+            fraud_indicators.append('Multiple uploads in short time period')
+            is_fraud = True
+        
+        # Check if document status is suspicious
+        if latest_doc.status in ['rejected', 'flagged']:
+            fraud_indicators.append('Document previously flagged or rejected')
+            is_fraud = True
+        
+        # Check file size anomalies (too small might be fake)
+        if latest_doc.file_size and latest_doc.file_size < 10000:  # Less than 10KB
+            fraud_indicators.append('Unusually small file size')
+        
+        # Simulate OCR content verification (in real implementation, check against known patterns)
+        if 'tampered' in (latest_doc.description or '').lower():
+            fraud_indicators.append('Content analysis indicates tampering')
+            is_fraud = True
+        
+        verification_result = {
+            'verified': not is_fraud and latest_doc.status == 'verified',
+            'status': 'FRAUD_DETECTED' if is_fraud else 'VERIFIED' if latest_doc.status == 'verified' else 'PENDING_VERIFICATION',
+            'confidence_score': 95 if not is_fraud and latest_doc.status == 'verified' else 30 if is_fraud else 70,
+            'student_info': {
+                'name': student.full_name,
+                'email': student.email,
+                'college': student.college_name,
+                'course': student.course,
+                'roll_number': student.roll_number
+            },
+            'document_info': {
+                'id': latest_doc.id,
+                'title': latest_doc.title,
+                'upload_date': latest_doc.created_at.isoformat(),
+                'status': latest_doc.status,
+                'file_size': latest_doc.file_size
+            },
+            'fraud_indicators': fraud_indicators,
+            'verification_timestamp': datetime.utcnow().isoformat(),
+            'verified_by': user.company_name or user.full_name
+        }
+        
+        # Log the verification attempt
+        log_user_action(
+            user_id=current_user_id,
+            action='document_verification',
+            details=f'Verified document for {student_email}',
+            resource_type='document',
+            resource_id=latest_doc.id
+        )
+        
+        return jsonify(verification_result), 200
+        
+    except Exception as e:
+        return jsonify({'message': 'Verification failed', 'error': str(e)}), 500
