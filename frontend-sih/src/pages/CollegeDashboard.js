@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Users, 
@@ -16,9 +16,22 @@ import {
   MapPin,
   Search,
   Filter,
-  Shield
+  Shield,
+  Upload,
+  UploadCloud,
+  FileStack,
+  Plus,
+  X,
+  AlertCircle,
+  Database,
+  BarChart3,
+  Zap,
+  Settings,
+  Bell,
+  Download
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import toast from 'react-hot-toast';
 import './CollegeDashboard.css';
 
 const CollegeDashboard = () => {
@@ -32,10 +45,59 @@ const CollegeDashboard = () => {
   const [filterStatus, setFilterStatus] = useState('all');
   const [selectedDocument, setSelectedDocument] = useState(null);
   const [showVerificationModal, setShowVerificationModal] = useState(false);
+  
+  // Bulk upload related states
+  const [showBulkUpload, setShowBulkUpload] = useState(false);
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [isDragOver, setIsDragOver] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState({});
+  const [processingFiles, setProcessingFiles] = useState([]);
+  const fileInputRef = useRef(null);
+  
+  // Profile editing state
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
+  const [editProfileData, setEditProfileData] = useState({});
+  const [profileCompletion, setProfileCompletion] = useState(0);
+  
+  // Notification state
+  const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
     loadData();
+    calculateProfileCompletion();
+    loadNotifications();
   }, []);
+
+  // Calculate profile completion
+  const calculateProfileCompletion = () => {
+    const fields = ['college_name', 'email', 'phone', 'address'];
+    const completed = fields.filter(field => user?.[field] && user[field].trim() !== '').length;
+    const percentage = Math.round((completed / fields.length) * 100);
+    setProfileCompletion(percentage);
+  };
+
+  // Load notifications
+  const loadNotifications = () => {
+    const mockNotifications = [
+      {
+        id: '1',
+        type: 'pending',
+        title: 'New Document Pending',
+        message: '3 new documents require verification',
+        time: '5 minutes ago',
+        unread: true
+      },
+      {
+        id: '2',
+        type: 'success',
+        title: 'Bulk Upload Complete',
+        message: 'Successfully processed 12 documents',
+        time: '2 hours ago',
+        unread: false
+      }
+    ];
+    setNotifications(mockNotifications);
+  };
 
   const loadData = async () => {
     try {
@@ -177,6 +239,174 @@ const CollegeDashboard = () => {
     }
   };
 
+  // Bulk upload functionality
+  const handleFileSelect = (files) => {
+    const fileArray = Array.from(files);
+    const validFiles = fileArray.filter(file => {
+      const isValidType = ['application/pdf', 'image/jpeg', 'image/png', 'image/jpg'].includes(file.type);
+      const isValidSize = file.size <= 10 * 1024 * 1024; // 10MB limit
+      
+      if (!isValidType) {
+        toast.error(`${file.name}: Only PDF and image files are allowed`);
+        return false;
+      }
+      
+      if (!isValidSize) {
+        toast.error(`${file.name}: File size must be less than 10MB`);
+        return false;
+      }
+      
+      return true;
+    });
+
+    if (validFiles.length > 0) {
+      setSelectedFiles(prev => [...prev, ...validFiles]);
+      toast.success(`${validFiles.length} files selected for upload`);
+    }
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragOver(false);
+    const files = e.dataTransfer.files;
+    handleFileSelect(files);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    setIsDragOver(false);
+  };
+
+  const removeFile = (index) => {
+    setSelectedFiles(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const checkForDuplicates = async (file) => {
+    // Simulate duplicate detection
+    const existingFiles = ['existing_document_1.pdf', 'student_marksheet.pdf'];
+    return existingFiles.includes(file.name);
+  };
+
+  const processBulkUpload = async () => {
+    if (selectedFiles.length === 0) {
+      toast.error('Please select files to upload');
+      return;
+    }
+
+    setProcessingFiles(selectedFiles.map(file => ({
+      name: file.name,
+      status: 'processing',
+      progress: 0
+    })));
+
+    for (let i = 0; i < selectedFiles.length; i++) {
+      const file = selectedFiles[i];
+      
+      try {
+        // Check for duplicates
+        const isDuplicate = await checkForDuplicates(file);
+        
+        if (isDuplicate) {
+          setProcessingFiles(prev => 
+            prev.map((pf, index) => 
+              index === i 
+                ? { ...pf, status: 'duplicate', message: 'Document already exists in system' }
+                : pf
+            )
+          );
+          
+          toast(`${file.name} already exists`, {
+            icon: '⚠️',
+            style: {
+              borderRadius: '10px',
+              background: '#fff3cd',
+              color: '#856404',
+              border: '1px solid #ffeaa7'
+            }
+          });
+          continue;
+        }
+
+        // Simulate upload progress
+        for (let progress = 0; progress <= 100; progress += 20) {
+          setProcessingFiles(prev => 
+            prev.map((pf, index) => 
+              index === i 
+                ? { ...pf, progress: progress }
+                : pf
+            )
+          );
+          await new Promise(resolve => setTimeout(resolve, 200));
+        }
+
+        // Mark as completed
+        setProcessingFiles(prev => 
+          prev.map((pf, index) => 
+            index === i 
+              ? { ...pf, status: 'completed', message: 'Successfully uploaded and processed' }
+              : pf
+          )
+        );
+
+        // Add to documents list
+        const newDoc = {
+          id: `bulk_${Date.now()}_${i}`,
+          studentName: 'Bulk Upload',
+          rollNumber: 'BULK',
+          college_name: user?.college_name,
+          title: file.name,
+          document_type: file.name.includes('marksheet') ? 'marksheet' : 'certificate',
+          status: 'pending',
+          created_at: new Date().toISOString(),
+          uploaded_by: 'bulk'
+        };
+
+        setDocuments(prev => [newDoc, ...prev]);
+
+      } catch (error) {
+        setProcessingFiles(prev => 
+          prev.map((pf, index) => 
+            index === i 
+              ? { ...pf, status: 'error', message: 'Upload failed' }
+              : pf
+          )
+        );
+      }
+    }
+
+    toast.success('Bulk upload completed!');
+    
+    // Clear after 3 seconds
+    setTimeout(() => {
+      setSelectedFiles([]);
+      setProcessingFiles([]);
+      setShowBulkUpload(false);
+    }, 3000);
+  };
+
+  // Profile editing functions
+  const handleProfileEdit = () => {
+    setEditProfileData({
+      college_name: user?.college_name || '',
+      email: user?.email || '',
+      phone: user?.phone || '',
+      address: user?.address || ''
+    });
+    setIsEditingProfile(true);
+  };
+
+  const handleProfileSave = () => {
+    // Here you would typically save to backend
+    toast.success('Profile updated successfully!');
+    setIsEditingProfile(false);
+    calculateProfileCompletion();
+  };
+
   const handleLogout = () => {
     logout();
     navigate('/');
@@ -262,13 +492,13 @@ const CollegeDashboard = () => {
 
   return (
     <div className="college-dashboard">
-      {/* Header */}
+      {/* Enhanced Header */}
       <header className="dashboard-header">
         <div className="header-content">
           <div className="header-left">
             <div className="logo-section">
               <div className="logo-icon">
-                <Building size={32} color="#FF6B35" />
+                <Building size={32} />
               </div>
               <div className="logo-text">
                 <h1>College Dashboard</h1>
@@ -277,9 +507,24 @@ const CollegeDashboard = () => {
             </div>
           </div>
           <div className="header-right">
+            <div className="header-notifications">
+              <div className="notification-bell">
+                <Bell size={20} />
+                {notifications.filter(n => n.unread).length > 0 && (
+                  <span className="notification-badge">
+                    {notifications.filter(n => n.unread).length}
+                  </span>
+                )}
+              </div>
+            </div>
             <div className="user-info">
-              <User size={20} />
-              <span>{user?.college_name || user?.full_name || 'College Admin'}</span>
+              <div className="user-avatar">
+                <Building size={20} />
+              </div>
+              <div className="user-details">
+                <span className="user-name">{user?.college_name || 'College Admin'}</span>
+                <span className="user-role">Administrator</span>
+              </div>
             </div>
             <button className="logout-btn" onClick={handleLogout}>
               <LogOut size={18} />
@@ -292,72 +537,241 @@ const CollegeDashboard = () => {
       {/* Main Content */}
       <main className="dashboard-main">
         <div className="dashboard-container">
-          {/* Sidebar */}
+          {/* Enhanced Sidebar */}
           <aside className="dashboard-sidebar">
             <nav className="sidebar-nav">
               <button 
                 className={`nav-item ${activeTab === 'overview' ? 'active' : ''}`}
                 onClick={() => setActiveTab('overview')}
               >
-                <Building size={18} />
-                Overview
+                <div className="nav-icon">
+                  <BarChart3 size={18} />
+                </div>
+                <span>Overview</span>
               </button>
               <button 
                 className={`nav-item ${activeTab === 'students' ? 'active' : ''}`}
                 onClick={() => setActiveTab('students')}
               >
-                <Users size={18} />
-                Students
+                <div className="nav-icon">
+                  <Users size={18} />
+                </div>
+                <span>Students</span>
               </button>
               <button 
                 className={`nav-item ${activeTab === 'documents' ? 'active' : ''}`}
                 onClick={() => setActiveTab('documents')}
               >
-                <FileText size={18} />
-                Document Verification
+                <div className="nav-icon">
+                  <FileText size={18} />
+                </div>
+                <span>Document Verification</span>
+                {stats.pendingDocuments > 0 && (
+                  <div className="nav-badge">{stats.pendingDocuments}</div>
+                )}
+              </button>
+              <button 
+                className={`nav-item ${activeTab === 'bulk-upload' ? 'active' : ''}`}
+                onClick={() => setActiveTab('bulk-upload')}
+              >
+                <div className="nav-icon">
+                  <UploadCloud size={18} />
+                </div>
+                <span>Bulk Upload</span>
               </button>
             </nav>
+            
+            <div className="sidebar-footer">
+              <div className="quick-stats">
+                <div className="quick-stat">
+                  <Database size={16} />
+                  <div>
+                    <span className="stat-number">{stats.totalDocuments}</span>
+                    <span className="stat-label">Total Documents</span>
+                  </div>
+                </div>
+                <div className="quick-stat">
+                  <Zap size={16} />
+                  <div>
+                    <span className="stat-number">{stats.verifiedDocuments}</span>
+                    <span className="stat-label">Verified Today</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </aside>
 
           {/* Content Area */}
           <section className="dashboard-content">
             {activeTab === 'overview' && (
               <div className="overview-tab">
-                <h2>Welcome, {user?.college_name || 'College Admin'}!</h2>
-                
-                {/* College Information Card */}
-                <div className="profile-card">
-                  <h3>College Information</h3>
-                  <div className="profile-grid">
-                    <div className="profile-item">
-                      <Building size={18} />
-                      <div>
-                        <label>College Name</label>
-                        <span>{user?.college_name || 'Not provided'}</span>
-                      </div>
-                    </div>
-                    <div className="profile-item">
-                      <Mail size={18} />
-                      <div>
-                        <label>Email</label>
-                        <span>{user?.email}</span>
-                      </div>
-                    </div>
-                    <div className="profile-item">
-                      <Phone size={18} />
-                      <div>
-                        <label>Phone</label>
-                        <span>{user?.phone || 'Not provided'}</span>
-                      </div>
-                    </div>
-                    <div className="profile-item">
-                      <MapPin size={18} />
-                      <div>
-                        <label>Address</label>
-                        <span>{user?.address || 'Not provided'}</span>
-                      </div>
-                    </div>
+                <div className="welcome-section">
+                  <div className="welcome-content">
+                    <h2>Welcome back, {user?.college_name || 'College Admin'}!</h2>
+                    <p className="welcome-subtitle">Manage your institution's document verification efficiently</p>
                   </div>
+                  <div className="welcome-actions">
+                    <button 
+                      className="action-btn primary"
+                      onClick={() => setActiveTab('bulk-upload')}
+                    >
+                      <UploadCloud size={18} />
+                      Bulk Upload
+                    </button>
+                  </div>
+                </div>
+
+                {/* Enhanced Profile Card */}
+                <div className="enhanced-profile-card">
+                  <div className="profile-header">
+                    <div className="profile-title">
+                      <h3>College Information</h3>
+                      <div className="profile-completion">
+                        <div className="completion-circle">
+                          <svg className="completion-ring" width="40" height="40">
+                            <circle 
+                              cx="20" 
+                              cy="20" 
+                              r="16" 
+                              fill="none" 
+                              stroke="#e2e8f0" 
+                              strokeWidth="3"
+                            />
+                            <circle 
+                              cx="20" 
+                              cy="20" 
+                              r="16" 
+                              fill="none" 
+                              stroke="#22c55e" 
+                              strokeWidth="3" 
+                              strokeDasharray={`${profileCompletion * 1.005} 100`}
+                              strokeLinecap="round"
+                              transform="rotate(-90 20 20)"
+                            />
+                          </svg>
+                          <span className="completion-text">{profileCompletion}%</span>
+                        </div>
+                        <span className="completion-label">Complete</span>
+                      </div>
+                    </div>
+                    <button 
+                      className="edit-profile-btn"
+                      onClick={handleProfileEdit}
+                    >
+                      <Settings size={16} />
+                      Edit Profile
+                    </button>
+                  </div>
+
+                  {!isEditingProfile ? (
+                    <div className="profile-grid">
+                      <div className="profile-item">
+                        <div className="profile-icon">
+                          <Building size={18} />
+                        </div>
+                        <div className="profile-content">
+                          <label>College Name</label>
+                          {user?.college_name ? (
+                            <span>{user.college_name}</span>
+                          ) : (
+                            <span className="empty-field" onClick={handleProfileEdit}>
+                              Click to add college name
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      <div className="profile-item">
+                        <div className="profile-icon">
+                          <Mail size={18} />
+                        </div>
+                        <div className="profile-content">
+                          <label>Email</label>
+                          <span>{user?.email}</span>
+                        </div>
+                      </div>
+                      <div className="profile-item">
+                        <div className="profile-icon">
+                          <Phone size={18} />
+                        </div>
+                        <div className="profile-content">
+                          <label>Phone</label>
+                          {user?.phone ? (
+                            <span>{user.phone}</span>
+                          ) : (
+                            <span className="empty-field" onClick={handleProfileEdit}>
+                              Click to add phone number
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      <div className="profile-item">
+                        <div className="profile-icon">
+                          <MapPin size={18} />
+                        </div>
+                        <div className="profile-content">
+                          <label>Address</label>
+                          {user?.address ? (
+                            <span>{user.address}</span>
+                          ) : (
+                            <span className="empty-field" onClick={handleProfileEdit}>
+                              Click to add address
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="profile-edit-form">
+                      <div className="edit-grid">
+                        <div className="edit-field">
+                          <label>College Name</label>
+                          <input
+                            type="text"
+                            value={editProfileData.college_name}
+                            onChange={(e) => setEditProfileData({...editProfileData, college_name: e.target.value})}
+                            placeholder="Enter college name"
+                          />
+                        </div>
+                        <div className="edit-field">
+                          <label>Email</label>
+                          <input
+                            type="email"
+                            value={editProfileData.email}
+                            onChange={(e) => setEditProfileData({...editProfileData, email: e.target.value})}
+                            placeholder="Enter email"
+                          />
+                        </div>
+                        <div className="edit-field">
+                          <label>Phone</label>
+                          <input
+                            type="tel"
+                            value={editProfileData.phone}
+                            onChange={(e) => setEditProfileData({...editProfileData, phone: e.target.value})}
+                            placeholder="Enter phone number"
+                          />
+                        </div>
+                        <div className="edit-field">
+                          <label>Address</label>
+                          <textarea
+                            value={editProfileData.address}
+                            onChange={(e) => setEditProfileData({...editProfileData, address: e.target.value})}
+                            placeholder="Enter address"
+                            rows="3"
+                          />
+                        </div>
+                      </div>
+                      <div className="edit-actions">
+                        <button className="save-btn" onClick={handleProfileSave}>
+                          <CheckCircle size={16} />
+                          Save Changes
+                        </button>
+                        <button className="cancel-btn" onClick={() => setIsEditingProfile(false)}>
+                          <X size={16} />
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Statistics */}
@@ -536,6 +950,170 @@ const CollegeDashboard = () => {
                     ))}
                   </div>
                 )}
+              </div>
+            )}
+
+            {activeTab === 'bulk-upload' && (
+              <div className="bulk-upload-tab">
+                <div className="tab-header">
+                  <div>
+                    <h2>Bulk Document Upload</h2>
+                    <p>Upload multiple documents for batch processing</p>
+                  </div>
+                  <div className="bulk-stats">
+                    <div className="bulk-stat">
+                      <FileStack size={20} />
+                      <span>{selectedFiles.length} files selected</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* File Upload Area */}
+                <div 
+                  className={`bulk-upload-area ${isDragOver ? 'drag-over' : ''}`}
+                  onDrop={handleDrop}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    multiple
+                    accept=".pdf,.jpg,.jpeg,.png"
+                    onChange={(e) => handleFileSelect(e.target.files)}
+                    style={{ display: 'none' }}
+                  />
+                  
+                  <div className="upload-content">
+                    <div className="upload-icon">
+                      <UploadCloud size={48} />
+                    </div>
+                    <h3>Drag & Drop files here</h3>
+                    <p>or click to browse files</p>
+                    <div className="upload-info">
+                      <span>Supported formats: PDF, JPG, PNG</span>
+                      <span>Maximum file size: 10MB</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Selected Files */}
+                {selectedFiles.length > 0 && (
+                  <div className="selected-files-section">
+                    <div className="section-header">
+                      <h3>Selected Files ({selectedFiles.length})</h3>
+                      <button 
+                        className="clear-all-btn"
+                        onClick={() => setSelectedFiles([])}
+                      >
+                        <X size={16} />
+                        Clear All
+                      </button>
+                    </div>
+                    
+                    <div className="selected-files">
+                      {selectedFiles.map((file, index) => (
+                        <div key={index} className="file-item">
+                          <div className="file-info">
+                            <FileText size={20} />
+                            <div className="file-details">
+                              <span className="file-name">{file.name}</span>
+                              <span className="file-size">
+                                {(file.size / 1024 / 1024).toFixed(2)} MB
+                              </span>
+                            </div>
+                          </div>
+                          <button 
+                            className="remove-file-btn"
+                            onClick={() => removeFile(index)}
+                          >
+                            <X size={16} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="upload-actions">
+                      <button 
+                        className="upload-btn"
+                        onClick={processBulkUpload}
+                        disabled={processingFiles.length > 0}
+                      >
+                        <Upload size={16} />
+                        {processingFiles.length > 0 ? 'Processing...' : 'Start Upload'}
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Processing Status */}
+                {processingFiles.length > 0 && (
+                  <div className="processing-section">
+                    <h3>Processing Files</h3>
+                    <div className="processing-files">
+                      {processingFiles.map((file, index) => (
+                        <div key={index} className={`processing-item ${file.status}`}>
+                          <div className="processing-info">
+                            <FileText size={18} />
+                            <div className="processing-details">
+                              <span className="processing-name">{file.name}</span>
+                              {file.message && (
+                                <span className="processing-message">{file.message}</span>
+                              )}
+                            </div>
+                          </div>
+                          
+                          <div className="processing-status">
+                            {file.status === 'processing' && (
+                              <div className="progress-indicator">
+                                <div className="progress-bar">
+                                  <div 
+                                    className="progress-fill" 
+                                    style={{ width: `${file.progress}%` }}
+                                  />
+                                </div>
+                                <span>{file.progress}%</span>
+                              </div>
+                            )}
+                            {file.status === 'completed' && (
+                              <CheckCircle size={20} className="status-completed" />
+                            )}
+                            {file.status === 'duplicate' && (
+                              <AlertCircle size={20} className="status-duplicate" />
+                            )}
+                            {file.status === 'error' && (
+                              <XCircle size={20} className="status-error" />
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Upload Guidelines */}
+                <div className="upload-guidelines">
+                  <h4>Upload Guidelines</h4>
+                  <div className="guidelines-grid">
+                    <div className="guideline">
+                      <CheckCircle size={16} />
+                      <span>Ensure documents are clear and readable</span>
+                    </div>
+                    <div className="guideline">
+                      <CheckCircle size={16} />
+                      <span>Use descriptive filenames for easy identification</span>
+                    </div>
+                    <div className="guideline">
+                      <CheckCircle size={16} />
+                      <span>Group similar document types together</span>
+                    </div>
+                    <div className="guideline">
+                      <CheckCircle size={16} />
+                      <span>Verify document authenticity before upload</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
           </section>
