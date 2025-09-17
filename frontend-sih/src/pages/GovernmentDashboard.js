@@ -19,9 +19,20 @@ import {
   Settings,
   BarChart3,
   Activity,
-  Database
+  Database,
+  TrendingUp,
+  Globe,
+  Zap,
+  AlertTriangle,
+  Monitor,
+  Server,
+  Crown,
+  Bell,
+  Gauge,
+  Target
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import toast from 'react-hot-toast';
 import './GovernmentDashboard.css';
 
 const GovernmentDashboard = () => {
@@ -262,29 +273,46 @@ const GovernmentDashboard = () => {
 
   return (
     <div className="government-dashboard">
-      {/* Header */}
+      {/* Enhanced Header */}
       <header className="dashboard-header">
         <div className="header-content">
           <div className="header-left">
             <div className="logo-section">
               <div className="logo-icon">
-                <Shield size={32} color="#FF6B35" />
+                <Crown size={32} />
               </div>
               <div className="logo-text">
                 <h1>Government Dashboard</h1>
-                <p>New India Credential Kavach</p>
+                <p>New India Credential Kavach - Administrative Control</p>
               </div>
             </div>
           </div>
           <div className="header-right">
+            <div className="header-notifications">
+              <div className="notification-bell">
+                <Bell size={20} />
+                <span className="notification-badge">3</span>
+              </div>
+            </div>
+            <div className="system-status">
+              <div className="status-indicator">
+                <div className="status-dot success"></div>
+                <span>All Systems Operational</span>
+              </div>
+            </div>
             <div className="user-info">
-              <User size={20} />
-              <span>
-                {user?.email === 'admin@credentialkavach.gov.in' 
-                  ? 'System Administrator' 
-                  : user?.department_name || user?.full_name || 'Government Official'
-                }
-              </span>
+              <div className="user-avatar">
+                <Shield size={20} />
+              </div>
+              <div className="user-details">
+                <span className="user-name">
+                  {user?.email === 'admin@credentialkavach.gov.in' 
+                    ? 'System Administrator' 
+                    : user?.full_name || 'Government Official'
+                  }
+                </span>
+                <span className="user-role">Administrator</span>
+              </div>
             </div>
             <button className="logout-btn" onClick={handleLogout}>
               <LogOut size={18} />
@@ -335,8 +363,81 @@ const GovernmentDashboard = () => {
           <section className="dashboard-content">
             {activeTab === 'overview' && (
               <div className="overview-tab">
-                <h2>System Overview</h2>
-                <p>Monitor the entire credential verification system</p>
+                {/* Enhanced Welcome Section */}
+                <div className="welcome-section">
+                  <div className="welcome-content">
+                    <h2>National Credential System Dashboard</h2>
+                    <p className="welcome-subtitle">Real-time monitoring and control of India's digital credential verification infrastructure</p>
+                  </div>
+                  <div className="welcome-actions">
+                    <button className="action-btn primary">
+                      <TrendingUp size={18} />
+                      View Analytics
+                    </button>
+                    <button className="action-btn secondary">
+                      <Settings size={18} />
+                      System Settings
+                    </button>
+                  </div>
+                </div>
+
+                {/* Critical Metrics Dashboard */}
+                <div className="critical-metrics">
+                  <h3>Critical System Metrics</h3>
+                  <div className="metrics-row">
+                    <div className="metric-card primary">
+                      <div className="metric-header">
+                        <div className="metric-icon">
+                          <Globe size={24} />
+                        </div>
+                        <span className="metric-trend up">+12.5%</span>
+                      </div>
+                      <div className="metric-data">
+                        <span className="metric-number">{systemStats.totalDocuments.toLocaleString()}</span>
+                        <span className="metric-label">Documents Verified</span>
+                      </div>
+                    </div>
+                    
+                    <div className="metric-card success">
+                      <div className="metric-header">
+                        <div className="metric-icon">
+                          <CheckCircle size={24} />
+                        </div>
+                        <span className="metric-trend up">+8.2%</span>
+                      </div>
+                      <div className="metric-data">
+                        <span className="metric-number">84.5%</span>
+                        <span className="metric-label">OCR Accuracy</span>
+                      </div>
+                    </div>
+
+                    <div className="metric-card warning">
+                      <div className="metric-header">
+                        <div className="metric-icon">
+                          <Clock size={24} />
+                        </div>
+                        <span className="metric-trend down">-15.3%</span>
+                      </div>
+                      <div className="metric-data">
+                        <span className="metric-number">{systemStats.pendingDocuments}</span>
+                        <span className="metric-label">Pending Reviews</span>
+                      </div>
+                    </div>
+
+                    <div className="metric-card info">
+                      <div className="metric-header">
+                        <div className="metric-icon">
+                          <Building2 size={24} />
+                        </div>
+                        <span className="metric-trend up">+2</span>
+                      </div>
+                      <div className="metric-data">
+                        <span className="metric-number">{systemStats.totalColleges}</span>
+                        <span className="metric-label">Active Institutions</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
                 {/* System Statistics */}
                 <div className="stats-grid">
@@ -378,36 +479,59 @@ const GovernmentDashboard = () => {
                   </div>
                 </div>
 
-                {/* Government Profile Card */}
-                <div className="profile-card">
-                  <h3>Department Information</h3>
-                  <div className="profile-grid">
-                    <div className="profile-item">
-                      <Building2 size={18} />
-                      <div>
-                        <label>Department</label>
-                        <span>{user?.department_name || 'Not provided'}</span>
+                {/* Enhanced System Performance Card */}
+                <div className="enhanced-performance-card">
+                  <div className="performance-header">
+                    <div className="performance-title">
+                      <h3>System Performance</h3>
+                      <div className="performance-indicator">
+                        <div className="status-dot success"></div>
+                        <span>Optimal</span>
                       </div>
                     </div>
-                    <div className="profile-item">
-                      <User size={18} />
-                      <div>
-                        <label>Designation</label>
-                        <span>{user?.designation || 'Not provided'}</span>
+                    <div className="performance-actions">
+                      <button className="action-btn secondary">
+                        <Monitor size={16} />
+                        View Details
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="performance-metrics">
+                    <div className="metric-item">
+                      <div className="metric-icon">
+                        <Gauge size={20} />
+                      </div>
+                      <div className="metric-info">
+                        <span className="metric-value">84.5%</span>
+                        <span className="metric-label">OCR Accuracy</span>
                       </div>
                     </div>
-                    <div className="profile-item">
-                      <Mail size={18} />
-                      <div>
-                        <label>Email</label>
-                        <span>{user?.email}</span>
+                    <div className="metric-item">
+                      <div className="metric-icon">
+                        <Server size={20} />
+                      </div>
+                      <div className="metric-info">
+                        <span className="metric-value">99.9%</span>
+                        <span className="metric-label">Uptime</span>
                       </div>
                     </div>
-                    <div className="profile-item">
-                      <Phone size={18} />
-                      <div>
-                        <label>Phone</label>
-                        <span>{user?.phone || 'Not provided'}</span>
+                    <div className="metric-item">
+                      <div className="metric-icon">
+                        <Zap size={20} />
+                      </div>
+                      <div className="metric-info">
+                        <span className="metric-value">2.3s</span>
+                        <span className="metric-label">Avg Response</span>
+                      </div>
+                    </div>
+                    <div className="metric-item">
+                      <div className="metric-icon">
+                        <Target size={20} />
+                      </div>
+                      <div className="metric-info">
+                        <span className="metric-value">0.1%</span>
+                        <span className="metric-label">Error Rate</span>
                       </div>
                     </div>
                   </div>
@@ -663,7 +787,7 @@ const GovernmentDashboard = () => {
                       </div>
                       <div className="health-item">
                         <span className="health-label">OCR Accuracy</span>
-                        <span className="health-value success">97.2%</span>
+                        <span className="health-value success">84.5%</span>
                       </div>
                       <div className="health-item">
                         <span className="health-label">Error Rate</span>
