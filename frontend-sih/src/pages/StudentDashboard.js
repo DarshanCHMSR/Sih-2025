@@ -130,13 +130,13 @@ const StudentDashboard = () => {
           setDuplicateFound(null);
           setActiveTab('documents');
           setShowMyDocuments(true);
-          toast(`Similar document "${existingDocument.title}" already exists`, {
-            icon: 'ℹ️',
-            style: {
-              background: '#e0f2fe',
-              color: '#0c4a6e',
-            },
-          });
+          // toast(`Similar document "${existingDocument.title}" already exists`, {
+          //   icon: 'ℹ️',
+          //   style: {
+          //     background: '#e0f2fe',
+          //     color: '#0c4a6e',
+          //   },
+          // });
         }, 2000);
         
       } else {
@@ -461,7 +461,7 @@ const StudentDashboard = () => {
               >
                 <FileText size={18} />
                 <span>My Documents</span>
-                <div className="document-count">{documents.length}</div>
+                {/* <div className="document-count">{documents.length}</div> */}
                 {activeTab === 'documents' && <div className="active-indicator"></div>}
               </button>
             </nav>
