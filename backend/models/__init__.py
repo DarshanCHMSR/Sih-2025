@@ -2,9 +2,13 @@ from datetime import datetime
 from enum import Enum
 import uuid
 
-# Import db from credential_app
-# This import will work because credential_app defines db before importing models
-from credential_app import db
+# Import db from app or credential_app
+try:
+    from credential_app import db
+except ImportError:
+    # Fallback for when running from app.py directly
+    from flask_sqlalchemy import SQLAlchemy
+    db = SQLAlchemy()
 
 class Role(db.Model):
     """User roles in the system"""
